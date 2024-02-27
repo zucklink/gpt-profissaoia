@@ -2,7 +2,23 @@ import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
 import type { SxProps } from '@mui/joy/styles/types';
-import { Alert, Avatar, Box, Button, Card, CardContent, Checkbox, IconButton, Input, List, ListItem, ListItemButton, Textarea, Tooltip, Typography } from '@mui/joy';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Checkbox,
+  IconButton,
+  Input,
+  List,
+  ListItem,
+  ListItemButton,
+  Textarea,
+  Tooltip,
+  Typography,
+} from '@mui/joy';
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
@@ -71,7 +87,7 @@ function Tile(props: {
       {/* [Edit mode checkbox] */}
       {props.isEditMode && (
         <Checkbox
-          variant='soft' color='neutral'
+          variant="soft" color="neutral"
           checked={!props.isHidden}
           // label={<Typography level='body-xs'>show</Typography>}
           sx={{ position: 'absolute', left: `${tileGap}rem`, top: `${tileGap}rem` }}
@@ -83,7 +99,7 @@ function Tile(props: {
       {/*  {props.symbol}*/}
       {/*</Box>*/}
       <Avatar
-        variant='plain'
+        variant="plain"
         src={props.imageUrl}
         sx={{
           '--Avatar-size': '3rem',
@@ -105,7 +121,10 @@ function Tile(props: {
 /**
  * Purpose selector for the current chat. Clicking on any item activates it for the current chat.
  */
-export function PersonaSelector(props: { conversationId: DConversationId, runExample: (example: string) => void }) {
+export function PersonaSelector(props: {
+  conversationId: DConversationId,
+  runExample: (example: string) => void
+}) {
 
   // state
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -114,8 +133,11 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
 
   // external state
   const showFinder = useUIPreferencesStore(state => state.showPersonaFinder);
-  const [showExamples, showExamplescomponent] = useChipBoolean('Examples', false);
-  const [showPrompt, showPromptComponent] = useChipBoolean('Prompt', false);
+  const [showExamples, showExamplescomponent] = useChipBoolean('Exemplos', true);
+  // let [showPrompt, showPromptComponent] = useChipBoolean('Prompt', false);
+  const showPrompt = false;
+  const showPromptComponent = false;
+
   const { systemPurposeId, setSystemPurposeId } = useChatStore(state => {
     const conversation = state.conversations.find(conversation => conversation.id === props.conversationId);
     return {
@@ -123,7 +145,13 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
       setSystemPurposeId: conversation ? state.setSystemPurposeId : null,
     };
   }, shallow);
-  const { hiddenPurposeIDs, toggleHiddenPurposeId } = usePurposeStore(state => ({ hiddenPurposeIDs: state.hiddenPurposeIDs, toggleHiddenPurposeId: state.toggleHiddenPurposeId }), shallow);
+  const {
+    hiddenPurposeIDs,
+    toggleHiddenPurposeId,
+  } = usePurposeStore(state => ({
+    hiddenPurposeIDs: state.hiddenPurposeIDs,
+    toggleHiddenPurposeId: state.toggleHiddenPurposeId,
+  }), shallow);
   const { chatLLM } = useChatLLM();
 
 
@@ -143,7 +171,8 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
 
   const unfilteredPurposeIDs = (filteredIDs && showFinder) ? filteredIDs : Object.keys(SystemPurposes) as SystemPurposeId[];
   const visiblePurposeIDs = editMode ? unfilteredPurposeIDs : unfilteredPurposeIDs.filter(id => !hiddenPurposeIDs.includes(id));
-  const hidePersonaCreator = hiddenPurposeIDs.includes(PURPOSE_ID_PERSONA_CREATOR);
+  // const hidePersonaCreator = hiddenPurposeIDs.includes(PURPOSE_ID_PERSONA_CREATOR);
+  const hidePersonaCreator = true;
 
 
   // Handlers
@@ -184,12 +213,12 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
     // Filter results based on search term (title and description)
     const lcQuery = query.toLowerCase();
     const ids = (Object.keys(SystemPurposes) as SystemPurposeId[])
-      .filter(key => SystemPurposes.hasOwnProperty(key))
-      .filter(key => {
-        const purpose = SystemPurposes[key as SystemPurposeId];
-        return purpose.title.toLowerCase().includes(lcQuery)
-          || (typeof purpose.description === 'string' && purpose.description.toLowerCase().includes(lcQuery));
-      });
+    .filter(key => SystemPurposes.hasOwnProperty(key))
+    .filter(key => {
+      const purpose = SystemPurposes[key as SystemPurposeId];
+      return purpose.title.toLowerCase().includes(lcQuery)
+        || (typeof purpose.description === 'string' && purpose.description.toLowerCase().includes(lcQuery));
+    });
 
     setSearchQuery(query);
     setFilteredIDs(ids);
@@ -224,10 +253,10 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
       {showFinder && <Box>
         <Input
           fullWidth
-          variant='outlined' color='neutral'
+          variant="outlined" color="neutral"
           value={searchQuery} onChange={handleSearchOnChange}
           onKeyDown={handleSearchOnKeyDown}
-          placeholder='Search for purpose…'
+          placeholder="Search for purpose…"
           startDecorator={<SearchIcon />}
           endDecorator={searchQuery && (
             <IconButton onClick={handleSearchClear}>
@@ -254,11 +283,12 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
           gridColumn: '1 / -1',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <Typography level='title-sm'>
-            AI Persona
+          <Typography level="title-sm">
+            Personas de IA
           </Typography>
-          <Tooltip disableInteractive title={editMode ? 'Done Editing' : 'Edit Tiles'}>
-            <IconButton size='sm' onClick={toggleEditMode} sx={{ my: '-0.25rem' /* absorb the button padding */ }}>
+          <Tooltip disableInteractive title={editMode ? 'Concluir Edição' : 'Editar Blocos'}>
+            <IconButton size="sm" onClick={toggleEditMode}
+                        sx={{ my: '-0.25rem' /* absorb the button padding */ }}>
               {editMode ? <DoneIcon /> : <EditIcon />}
             </IconButton>
           </Tooltip>
@@ -284,20 +314,20 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
         })}
 
         {/* Persona Creator Tile */}
-        {(editMode || !hidePersonaCreator) && (
-          <Tile
-            text='Persona Creator'
-            symbol='🎭'
-            isActive={false}
-            isEditMode={editMode}
-            isHidden={hidePersonaCreator}
-            onClick={() => editMode ? toggleHiddenPurposeId(PURPOSE_ID_PERSONA_CREATOR) : void navigateToPersonas()}
-            sx={{
-              boxShadow: 'xs',
-              backgroundColor: 'neutral.softDisabledBg',
-            }}
-          />
-        )}
+        {/*{(editMode || !hidePersonaCreator) && (*/}
+        {/*  <Tile*/}
+        {/*    text="Persona Creator"*/}
+        {/*    symbol="🎭"*/}
+        {/*    isActive={false}*/}
+        {/*    isEditMode={editMode}*/}
+        {/*    isHidden={hidePersonaCreator}*/}
+        {/*    onClick={() => editMode ? toggleHiddenPurposeId(PURPOSE_ID_PERSONA_CREATOR) : void navigateToPersonas()}*/}
+        {/*    sx={{*/}
+        {/*      boxShadow: 'xs',*/}
+        {/*      backgroundColor: 'neutral.softDisabledBg',*/}
+        {/*    }}*/}
+        {/*  />*/}
+        {/*)}*/}
 
 
         {/* [row -3] Description */}
@@ -305,7 +335,7 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
 
 
           {/* Description*/}
-          <Typography level='body-sm' sx={{ color: 'text.primary' }}>
+          <Typography level="body-sm" sx={{ color: 'text.primary' }}>
             {!selectedPurpose
               ? 'Cannot find the former persona' + (systemPurposeId ? ` "${systemPurposeId}"` : '')
               : selectedPurpose?.description || 'No description available'}
@@ -319,10 +349,11 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
 
         {/* [row -3] Example incipits */}
         {systemPurposeId !== 'Custom' && (
-          <ExpanderControlledBox expanded={showExamples || (!isCustomPurpose && showPrompt)} sx={{ gridColumn: '1 / -1', pt: 1 }}>
+          <ExpanderControlledBox expanded={showExamples || (!isCustomPurpose && showPrompt)}
+                                 sx={{ gridColumn: '1 / -1', pt: 1 }}>
             {showExamples && (
               <List
-                aria-label='Persona Conversation Starters'
+                aria-label="Persona Conversation Starters"
                 sx={{
                   // example items 2-col layout
                   display: 'grid',
@@ -333,7 +364,7 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
                 {fourExamples?.map((example, idx) => (
                   <ListItem
                     key={idx}
-                    variant='soft'
+                    variant="soft"
                     sx={{
                       borderRadius: 'md',
                       // boxShadow: 'xs',
@@ -343,11 +374,12 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
                       '&:hover svg': { opacity: 1 },
                     }}
                   >
-                    <ListItemButton onClick={() => props.runExample(example)} sx={{ justifyContent: 'space-between' }}>
-                      <Typography level='body-sm'>
+                    <ListItemButton onClick={() => props.runExample(example)}
+                                    sx={{ justifyContent: 'space-between' }}>
+                      <Typography level="body-sm">
                         {example}
                       </Typography>
-                      <TelegramIcon color='primary' sx={{}} />
+                      <TelegramIcon color="primary" sx={{}} />
                     </ListItemButton>
                   </ListItem>
                 ))}
@@ -357,11 +389,11 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
               <Card>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                    <Typography level='title-sm'>
+                    <Typography level="title-sm">
                       System Prompt
                     </Typography>
                     <Button
-                      variant='plain' color='neutral' size='sm'
+                      variant="plain" color="neutral" size="sm"
                       endDecorator={<EditNoteIcon />}
                       onClick={() => handleSwitchToCustom(bareBonesPromptMixer(selectedPurpose?.systemMessage || 'No system message available', chatLLM?.id))}
                       sx={{ ml: 'auto', my: '-0.25rem' /* absorb the button padding */ }}
@@ -369,12 +401,12 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
                       Custom
                     </Button>
                   </Box>
-                  <Typography level='body-sm' sx={{ whiteSpace: 'break-spaces' }}>
+                  <Typography level="body-sm" sx={{ whiteSpace: 'break-spaces' }}>
                     {bareBonesPromptMixer(selectedPurpose?.systemMessage || 'No system message available', chatLLM?.id)}
                   </Typography>
                   {!!selectedPurpose?.systemMessageNotes && (
                     <Alert sx={{ m: -1, mt: 1, p: 1 }}>
-                      <Typography level='body-xs'>
+                      <Typography level="body-xs">
                         Prompt notes: {selectedPurpose.systemMessageNotes}
                       </Typography>
                     </Alert>
@@ -389,15 +421,15 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
         {systemPurposeId === 'Custom' && (
           <Textarea
             autoFocus
-            variant='outlined'
-            placeholder='Craft your custom system message here…'
+            variant="outlined"
+            placeholder="Crie sua mensagem de sistema personalizada aqui…"
             minRows={3}
             defaultValue={SystemPurposes['Custom']?.systemMessage}
             onChange={handleCustomSystemMessageChange}
             endDecorator={
               <Alert sx={{ flex: 1, p: 1 }}>
-                <Typography level='body-xs'>
-                  Just start chatting when done.
+                <Typography level="body-xs">
+                  Basta começar a conversar quando terminar.
                 </Typography>
               </Alert>
             }
