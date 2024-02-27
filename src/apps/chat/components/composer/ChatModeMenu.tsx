@@ -17,6 +17,7 @@ interface ChatModeDescription {
   requiresTTI?: boolean;
 }
 
+// @ts-ignore
 const ChatModeItems: { [key in ChatModeId]: ChatModeDescription } = {
   'generate-text': {
     label: 'Chat',

@@ -27,6 +27,7 @@ export type SystemPurposeData = {
   voices?: { elevenLabs?: { voiceId: string } };
 };
 
+// @ts-ignore
 export const SystemPurposes: { [key in SystemPurposeId]: SystemPurposeData } = {
   PromptGenesis: {
     title: 'Rosana Gênesis',
