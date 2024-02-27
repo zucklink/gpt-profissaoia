@@ -67,8 +67,11 @@ export function OptimaLayout(props: { suspendAutoModelsSetup?: boolean, children
       </OptimaDrawerProvider>
 
       {/* Overlay Modals */}
-      <Modals suspendAutoModelsSetup={props.suspendAutoModelsSetup} />
+      {/*<Modals suspendAutoModelsSetup={props.suspendAutoModelsSetup} />*/}
+      {/*GPT PROFISSAO IA - REMOVIDO MODAL DE SETUP DE MODELO AUTOMATICO*/}
+      {/*<Modals suspendAutoModelsSetup={true} />*/}
 
+      <Modals suspendAutoModelsSetup={props.suspendAutoModelsSetup} />
     </OptimaLayoutProvider>
   );
 }
