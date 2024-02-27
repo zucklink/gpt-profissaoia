@@ -140,7 +140,7 @@ function ChatDrawer(props: {
   const groupingComponent = React.useMemo(() => (
     <Dropdown>
       <MenuButton
-        aria-label='Group by'
+        aria-label='Agrupar por'
         slots={{ root: IconButton }}
         slotProps={{ root: { size: 'sm' } }}
       >
@@ -150,7 +150,7 @@ function ChatDrawer(props: {
         {(['date', 'persona'] as const).map(_gName => (
           <MenuItem key={'group-' + _gName} selected={navGrouping === _gName} onClick={() => setNavGrouping(grouping => grouping === _gName ? false : _gName)}>
             <ListItemDecorator>{navGrouping === _gName && <CheckIcon />}</ListItemDecorator>
-            Group by {_gName}
+            Agrupar por {_gName}
           </MenuItem>
         ))}
       </Menu>
@@ -162,7 +162,7 @@ function ChatDrawer(props: {
 
     {/* Drawer Header */}
     <PageDrawerHeader title='Chats' onClose={closeDrawer}>
-      <Tooltip title={enableFolders ? 'Hide Folders' : 'Use Folders'}>
+      <Tooltip title={enableFolders ? 'Ocultar Pastas' : 'Usar Pastas'}>
         <IconButton onClick={toggleEnableFolders}>
           {enableFolders ? <FoldersToggleOn /> : <FoldersToggleOff />}
         </IconButton>
@@ -200,8 +200,8 @@ function ChatDrawer(props: {
         minChars={2}
         onDebounce={setDebouncedSearchQuery}
         debounceTimeout={300}
-        placeholder='Search...'
-        aria-label='Search'
+        placeholder='Pesquisar...'
+        aria-label='Pesquisar'
         endDecorator={groupingComponent}
         sx={{ m: 2 }}
       />
@@ -229,7 +229,7 @@ function ChatDrawer(props: {
           }}
         >
           <ListItemDecorator><AddIcon sx={{ '--Icon-fontSize': 'var(--joy-fontSize-xl)', pl: '0.125rem' }} /></ListItemDecorator>
-          New chat
+          Novo chat
         </ListItemButton>
       </ListItem>
 
@@ -282,7 +282,7 @@ function ChatDrawer(props: {
           <ListItemDecorator>
             <FileUploadOutlinedIcon />
           </ListItemDecorator>
-          Import
+          Importar
           {/*<OpenAIIcon sx={{  ml: 'auto' }} />*/}
         </ListItemButton>
 
@@ -290,7 +290,7 @@ function ChatDrawer(props: {
           <ListItemDecorator>
             <FileDownloadOutlinedIcon />
           </ListItemDecorator>
-          Export
+          Exportar
         </ListItemButton>
       </Box>
 
@@ -298,7 +298,7 @@ function ChatDrawer(props: {
         <ListItemDecorator>
           <DeleteOutlineIcon />
         </ListItemDecorator>
-        Delete {filteredChatsCount >= 2 ? `all ${filteredChatsCount} chats` : 'chat'}
+        Excluir {filteredChatsCount >= 2 ? `todos os ${filteredChatsCount} chats` : 'chat'}
       </ListItemButton>
 
     </PageDrawerList>
