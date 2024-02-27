@@ -9,17 +9,15 @@ function isUrlAuthorized(referrer: string | null): boolean {
 
 export function middleware(request: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
-    const referrer = request.headers.get('referer');
-    const isInIframe = request.headers.get('sec-fetch-dest') === 'iframe';
+    const referrer = request.headers.get('Referer');
+    const isInIframe = request.headers.get('Sec-Fetch-Dest') === 'iframe';
 
-    if (isInIframe && referrer) {
-      if (!isUrlAuthorized(referrer)) {
+    if (!isInIframe || !referrer || !isUrlAuthorized(referrer)) {
         return Response.json(
           { success: false, message: 'Acesso não autorizado!' },
           { status: 403 }
         )
       }
-    }
   }
 
   return NextResponse.next();
