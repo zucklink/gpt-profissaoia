@@ -38,7 +38,7 @@ function LLMDropdown(props: {
 
 
   const llmDropdownItems: DropdownItems = React.useMemo(() => {
-    const llmItems: DropdownItems = {};
+    let llmItems: DropdownItems = {};
     let prevSourceId: DModelSourceId | null = null;
     let sepCount = 0;
     for (const llm of llms) {
@@ -75,6 +75,17 @@ function LLMDropdown(props: {
         }
       }
     }
+
+    //GPT PROFISSAO IA - VALOR FIXO GPT 4
+    // console.log('llmItems', llmItems);
+    llmItems = {};
+    llmItems["openai-gpt-4-0125-preview"] = {
+      title: "GPT-4 Turbo (0125) 🌟",
+    };
+    // llmItems["openai-gpt-3.5-turbo-0125"] = {
+    //   title: "GPT-4 Turbo (0125) 🌟",
+    // };
+
     return llmItems;
   }, [chatLlmId, llms]);
 
@@ -117,13 +128,13 @@ function LLMDropdown(props: {
     {/*  </ListItemButton>*/}
     {/*)}*/}
 
-    <ListItemButton key='menu-llms' onClick={openModelsSetup}>
-      <ListItemDecorator><BuildCircleIcon color='success' /></ListItemDecorator>
-      <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', gap: 1 }}>
-        Models
-        <KeyStroke combo='Ctrl + Shift + M' sx={{ ml: 2 }} />
-      </Box>
-    </ListItemButton>
+    {/*<ListItemButton key='menu-llms' onClick={openModelsSetup}>*/}
+    {/*  <ListItemDecorator><BuildCircleIcon color='success' /></ListItemDecorator>*/}
+    {/*  <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', gap: 1 }}>*/}
+    {/*    Models*/}
+    {/*    <KeyStroke combo='Ctrl + Shift + M' sx={{ ml: 2 }} />*/}
+    {/*  </Box>*/}
+    {/*</ListItemButton>*/}
 
   </>, [openModelsSetup]);
 
@@ -135,7 +146,7 @@ function LLMDropdown(props: {
       onChange={handleChatLLMChange}
       placeholder={props.placeholder || 'Models …'}
       appendOption={llmDropdownAppendOptions}
-      activeEndDecorator={llmDropdownButton}
+      // activeEndDecorator={llmDropdownButton}
     />
   );
 }
