@@ -19,22 +19,26 @@ export const ProviderSingleTab = (props: { children: React.ReactNode }) => {
 
   return (
     <Sheet
-      variant='solid'
+      variant="solid"
       invertedColors
       sx={{
         flexGrow: 1,
-        display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'center', alignItems: 'center', gap: 2,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 2,
         p: 3,
       }}
     >
 
       <Typography>
-        It looks like {Brand.Title.Base} is already running in another tab or window.
-        To continue here, please close the other instance first.
+        Parece que {Brand.Title.Base} já está em execução em outra aba ou janela.
+        Para continuar aqui, por favor feche a outra janela primeiro.
       </Typography>
 
       <Button onClick={reloadPage}>
-        Reload
+        Recarregar
       </Button>
 
     </Sheet>
