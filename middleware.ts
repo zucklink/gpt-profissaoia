@@ -24,5 +24,13 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/'], // Aplica o middleware apenas no caminho raiz
+  matcher: [
+    // Include root
+    '/',
+    // Include pages
+    '/(call|index|news|personas|link)(.*)',
+    // Include API routes
+    '/api(.*)',
+    // Note: this excludes _next, /images etc..
+  ],
 };
