@@ -8,23 +8,23 @@
  */
 export const Brand = {
   Title: {
-    Base: 'big-AGI',
-    Common: (process.env.NODE_ENV === 'development' ? '[DEV] ' : '') + 'big-AGI',
+    Base: 'GPT Profissão IA',
+    Common: (process.env.NODE_ENV === 'development' ? '[DEV] ' : '') + 'GPT Profissão IA',
   },
   Meta: {
-    Description: 'Launch big-AGI to unlock the full potential of AI, with precise control over your data and models. Voice interface, AI personas, advanced features, and fun UX.',
-    SiteName: 'big-AGI | Precision AI for You',
+    Description: 'GPT Profissão IA - Desbloqueie todo o potencial da IA, com controle preciso sobre seus dados e modelos. Personas de IA, recursos avançados e UX divertida.',
+    SiteName: 'GPT Profissão IA',
     ThemeColor: '#32383E',
-    TwitterSite: '@enricoros',
+    TwitterSite: '',
   },
   URIs: {
-    Home: 'https://big-agi.com',
+    Home: 'https://profissaoia.com',
     // App: 'https://get.big-agi.com',
-    CardImage: 'https://big-agi.com/icons/card-dark-1200.png',
-    OpenRepo: 'https://github.com/enricoros/big-agi',
-    OpenProject: 'https://github.com/users/enricoros/projects/4',
-    SupportInvite: 'https://discord.gg/MkH4qj2Jp9',
-    // Twitter: 'https://www.twitter.com/enricoros',
-    PrivacyPolicy: 'https://big-agi.com/privacy',
+    CardImage: 'https://d29k11s3lp6qcl.cloudfront.net/1707491572296_roxo-claro-transp.png',
+    OpenRepo: '',
+    OpenProject: '',
+    SupportInvite: '',
+    Twitter: '',
+    PrivacyPolicy: '',
   },
 } as const;
