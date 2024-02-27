@@ -90,51 +90,51 @@ export function ChatPageMenuItems(props: {
   return <>
 
     {/* System Message(s) */}
-    <MenuItem onClick={handleToggleSystemMessages}>
-      <ListItemDecorator><SettingsSuggestOutlinedIcon /></ListItemDecorator>
-      System messages
-      <Switch checked={showSystemMessages} onChange={handleToggleSystemMessages} sx={{ ml: 'auto' }} />
-    </MenuItem>
+    {/*<MenuItem onClick={handleToggleSystemMessages}>*/}
+    {/*  <ListItemDecorator><SettingsSuggestOutlinedIcon /></ListItemDecorator>*/}
+    {/*  System messages*/}
+    {/*  <Switch checked={showSystemMessages} onChange={handleToggleSystemMessages} sx={{ ml: 'auto' }} />*/}
+    {/*</MenuItem>*/}
 
     {/* Un /Split */}
-    <MenuItem onClick={handleToggleMultiPane}>
-      <ListItemDecorator>{props.isMobile
-        ? (isMultiPane ? <HorizontalSplitIcon /> : <HorizontalSplitOutlinedIcon />)
-        : (isMultiPane ? <VerticalSplitIcon /> : <VerticalSplitOutlinedIcon />)
-      }</ListItemDecorator>
-      {/* Unsplit / Split text*/}
-      {isMultiPane ? 'Unsplit' : props.isMobile ? 'Split Down' : 'Split Right'}
-      {/* '+' */}
-      {isMultiPane && (
-        <Tooltip title='Add Another Split'>
-          <IconButton
-            size='sm'
-            variant='outlined'
-            disabled={!canAddPane}
-            onClick={handleIncreaseMultiPane}
-            sx={{ ml: 'auto', /*mr: '2px',*/ my: '-0.25rem' /* absorb the menuItem padding */ }}
-          >
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </MenuItem>
+    {/*<MenuItem onClick={handleToggleMultiPane}>*/}
+    {/*  <ListItemDecorator>{props.isMobile*/}
+    {/*    ? (isMultiPane ? <HorizontalSplitIcon /> : <HorizontalSplitOutlinedIcon />)*/}
+    {/*    : (isMultiPane ? <VerticalSplitIcon /> : <VerticalSplitOutlinedIcon />)*/}
+    {/*  }</ListItemDecorator>*/}
+    {/*  /!* Unsplit / Split text*!/*/}
+    {/*  {isMultiPane ? 'Unsplit' : props.isMobile ? 'Split Down' : 'Split Right'}*/}
+    {/*  /!* '+' *!/*/}
+    {/*  {isMultiPane && (*/}
+    {/*    <Tooltip title='Add Another Split'>*/}
+    {/*      <IconButton*/}
+    {/*        size='sm'*/}
+    {/*        variant='outlined'*/}
+    {/*        disabled={!canAddPane}*/}
+    {/*        onClick={handleIncreaseMultiPane}*/}
+    {/*        sx={{ ml: 'auto', my: '-0.25rem'  }}*/}
+    {/*      >*/}
+    {/*        <AddIcon />*/}
+    {/*      </IconButton>*/}
+    {/*    </Tooltip>*/}
+    {/*  )}*/}
+    {/*</MenuItem>*/}
 
-    <MenuItem disabled={props.disableItems} onClick={handleConversationBranch}>
-      <ListItemDecorator><ForkRightIcon /></ListItemDecorator>
-      Branch
-    </MenuItem>
+    {/*<MenuItem disabled={props.disableItems} onClick={handleConversationBranch}>*/}
+    {/*  <ListItemDecorator><ForkRightIcon /></ListItemDecorator>*/}
+    {/*  Branch*/}
+    {/*</MenuItem>*/}
 
-    <ListDivider />
+    {/*<ListDivider />*/}
 
     <MenuItem disabled={props.disableItems} onClick={handleToggleMessageSelectionMode} sx={props.isMessageSelectionMode ? { fontWeight: 'lg' } : {}}>
       <ListItemDecorator>{props.isMessageSelectionMode ? <CheckBoxOutlinedIcon /> : <CheckBoxOutlineBlankOutlinedIcon />}</ListItemDecorator>
-      Cleanup ...
+      Limpar ...
     </MenuItem>
 
     <MenuItem disabled={props.disableItems} onClick={handleConversationFlatten}>
       <ListItemDecorator><CompressIcon color='success' /></ListItemDecorator>
-      Compress ...
+      Comprimir ...
     </MenuItem>
 
     <ListDivider />
@@ -142,7 +142,7 @@ export function ChatPageMenuItems(props: {
     <MenuItem disabled={props.disableItems} onClick={handleConversationClear}>
       <ListItemDecorator><ClearIcon /></ListItemDecorator>
       <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', gap: 1 }}>
-        Reset Chat
+        Reiniciar Chat
         {!props.disableItems && <KeyStroke combo='Ctrl + Alt + X' />}
       </Box>
     </MenuItem>
