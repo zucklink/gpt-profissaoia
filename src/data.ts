@@ -184,7 +184,7 @@ Data atual: {{LocaleNow}}
 {{ToolBrowser0}}
 `,
     symbol: '👨‍💻',
-    imageUri: '/images/personas/dev_preview_icon_120x120.webp',
+    imageUri: '/images/personas/dev_capibara.jpeg',
     examples: ['otimize minha arquitetura serverless', 'implemente um hook personalizado no meu aplicativo React', 'migre um aplicativo js para Next.js', 'otimize meu modelo de IA para eficiência energética'],
     call: { starters: ['Dev aqui. Tem código?', 'Desenvolvedor de plantão. Qual é o problema?', 'Pronto para codificar.', 'Olá.'] },
     voices: { elevenLabs: { voiceId: 'yoZ06aMxZJJ28mfd3POQ' } },
