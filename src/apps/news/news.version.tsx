@@ -8,9 +8,10 @@ export const incrementalNewsVersion: number = 13;
 
 
 export function shallRedirectToNews() {
-  const { usageCount, lastSeenNewsVersion } = useAppStateStore.getState();
-  const isNewsOutdated = (lastSeenNewsVersion || 0) < incrementalNewsVersion;
-  return isNewsOutdated && usageCount > 2;
+  // const { usageCount, lastSeenNewsVersion } = useAppStateStore.getState();
+  // const isNewsOutdated = (lastSeenNewsVersion || 0) < incrementalNewsVersion;
+  // return isNewsOutdated && usageCount > 2;
+  return false;
 }
 
 export function markNewsAsSeen() {
