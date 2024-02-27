@@ -51,19 +51,19 @@ function getTimeBucketEn(currentTime: number, midnightTime: number): string {
   const diff = midnightTime - currentTime;
 
   if (diff < oneDay) {
-    return 'Today';
+    return 'Hoje';
   } else if (diff < oneDay * 2) {
-    return 'Yesterday';
+    return 'Ontem';
   } else if (diff < oneWeek) {
-    return 'This Week';
+    return 'Esta Semana';
   } else if (diff < oneWeek * 2) {
-    return 'Last Week';
+    return 'Semana Passada';
   } else if (diff < oneMonth) {
-    return 'This Month';
+    return 'Este Mês';
   } else if (diff < oneMonth * 2) {
-    return 'Last Month';
+    return 'Mês Passado';
   } else {
-    return 'Older';
+    return 'Mais Antigo';
   }
 }
 
