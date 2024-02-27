@@ -10,7 +10,7 @@ import { KeyStroke } from '~/common/components/KeyStroke';
 
 const micLegend =
   <Box sx={{ px: 1, py: 0.75, lineHeight: '1.5rem' }}>
-    Voice input<br />
+    Ditar por áudio<br />
     <KeyStroke combo='Ctrl + M' sx={{ mt: 1, mb: 0.5 }} />
   </Box>;
 
