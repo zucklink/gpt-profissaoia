@@ -22,3 +22,7 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ['/'], // Aplica o middleware apenas no caminho raiz
+};
