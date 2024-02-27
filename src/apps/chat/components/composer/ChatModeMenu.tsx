@@ -20,26 +20,26 @@ interface ChatModeDescription {
 const ChatModeItems: { [key in ChatModeId]: ChatModeDescription } = {
   'generate-text': {
     label: 'Chat',
-    description: 'Persona replies',
+    description: 'Respostas da persona',
   },
-  'append-user': {
-    label: 'Write',
-    description: 'Appends a message',
-    shortcut: 'Alt + Enter',
-  },
-  'generate-image': {
-    label: 'Draw',
-    description: 'AI Image Generation',
-    requiresTTI: true,
-  },
-  'generate-text-beam': {
-    label: 'Best-Of', // Best of, Auto-Prime, Top Pick, Select Best
-    description: 'Smarter: best of multiple replies',
-  },
-  'generate-react': {
-    label: 'Reason + Act', //  · α
-    description: 'Answers questions in multiple steps',
-  },
+  // 'append-user': {
+  //   label: 'Write',
+  //   description: 'Anexa uma mensagem',
+  //   shortcut: 'Alt + Enter',
+  // },
+  // 'generate-image': {
+  //   label: 'Draw',
+  //   description: 'Geração de imagem IA',
+  //   requiresTTI: true,
+  // },
+  // 'generate-text-beam': {
+  //   label: 'Best-Of', // Best of, Auto-Prime, Top Pick, Select Best
+  //   description: 'Mais inteligente: melhor entre várias respostas',
+  // },
+  // 'generate-react': {
+  //   label: 'Reason + Act', //  · α
+  //   description: 'Responde perguntas em várias etapas',
+  // },
 };
 
 
@@ -73,21 +73,21 @@ export function ChatModeMenu(props: {
       {/*<ListDivider />*/}
 
       {/* ChatMode items */}
-      {Object.entries(ChatModeItems)
-        .filter(([key, data]) => key !== 'generate-text-beam' || labsChatBeam)
-        .map(([key, data]) =>
-          <MenuItem key={'chat-mode-' + key} onClick={() => props.onSetChatModeId(key as ChatModeId)}>
-            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-              <Radio checked={key === props.chatModeId} />
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography>{data.label}</Typography>
-                <Typography level='body-xs'>{data.description}{(data.requiresTTI && !props.capabilityHasTTI) ? 'Unconfigured' : ''}</Typography>
-              </Box>
-              {(key === props.chatModeId || !!data.shortcut) && (
-                <KeyStroke combo={fixNewLineShortcut((key === props.chatModeId) ? 'ENTER' : data.shortcut ? data.shortcut : 'ENTER', enterIsNewline)} />
-              )}
-            </Box>
-          </MenuItem>)}
+      {/*{Object.entries(ChatModeItems)*/}
+      {/*  .filter(([key, data]) => key !== 'generate-text-beam' || labsChatBeam)*/}
+      {/*  .map(([key, data]) =>*/}
+      {/*    <MenuItem key={'chat-mode-' + key} onClick={() => props.onSetChatModeId(key as ChatModeId)}>*/}
+      {/*      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>*/}
+      {/*        <Radio checked={key === props.chatModeId} />*/}
+      {/*        <Box sx={{ flexGrow: 1 }}>*/}
+      {/*          <Typography>{data.label}</Typography>*/}
+      {/*          <Typography level='body-xs'>{data.description}{(data.requiresTTI && !props.capabilityHasTTI) ? 'Unconfigured' : ''}</Typography>*/}
+      {/*        </Box>*/}
+      {/*        {(key === props.chatModeId || !!data.shortcut) && (*/}
+      {/*          <KeyStroke combo={fixNewLineShortcut((key === props.chatModeId) ? 'ENTER' : data.shortcut ? data.shortcut : 'ENTER', enterIsNewline)} />*/}
+      {/*        )}*/}
+      {/*      </Box>*/}
+      {/*    </MenuItem>)}*/}
 
     </CloseableMenu>
   );
