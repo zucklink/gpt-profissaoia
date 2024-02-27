@@ -27,6 +27,21 @@ let nextConfig = {
     serverComponentsExternalPackages: ['puppeteer-core'],
   },
 
+  async headers() {
+    return [
+      {
+        // Aplica esta regra a todas as rotas
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' https://profissao-ia.memberz.com.br;",
+          },
+        ],
+      },
+    ];
+  },
+
   webpack: (config, _options) => {
     // @mui/joy: anything material gets redirected to Joy
     config.resolve.alias['@mui/material'] = '@mui/joy';
