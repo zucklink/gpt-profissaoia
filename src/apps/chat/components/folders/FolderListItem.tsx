@@ -216,7 +216,7 @@ export function FolderListItem(props: {
               <ListItemDecorator>
                 <EditIcon />
               </ListItemDecorator>
-              Edit
+              Editar
             </MenuItem>
 
             {!deleteArmed ? (
@@ -224,7 +224,7 @@ export function FolderListItem(props: {
                 <ListItemDecorator>
                   <DeleteOutlineIcon />
                 </ListItemDecorator>
-                Delete
+                Excluir
               </MenuItem>
             ) : (
               <>
@@ -232,13 +232,13 @@ export function FolderListItem(props: {
                   <ListItemDecorator>
                     <CloseRoundedIcon />
                   </ListItemDecorator>
-                  Cancel
+                  Cancelar
                 </MenuItem>
                 <MenuItem onClick={handleDeleteConfirmed} color='danger' sx={{ color: 'danger' }}>
                   <ListItemDecorator>
                     <DeleteOutlineIcon />
                   </ListItemDecorator>
-                  Confirm Deletion
+                  Confirma Exclusão
                 </MenuItem>
               </>
             )}
