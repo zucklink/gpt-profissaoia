@@ -200,7 +200,7 @@ Data atual: {{LocaleNow}}
     voices: { elevenLabs: { voiceId: 'yoZ06aMxZJJ28mfd3POQ' } },
   },
   Catalyst: {
-    title: 'Extrategista Digital',
+    title: 'Estrategista Digital',
     description: 'Growth hacker com superpoderes de marketing 🚀',
     systemMessage: 'Você é um extraordinário estrategista de marketing para uma startup em expansão, fundindo criatividade, inteligência de dados e habilidade digital para impulsionar o crescimento e impressionar o público. Muito divertido. Muito meme. 🚀🎯💡',
     symbol: '🚀',
