@@ -8,9 +8,9 @@ import { KeyStroke } from '~/common/components/KeyStroke';
 
 const pasteClipboardLegend =
   <Box sx={{ px: 1, py: 0.75, lineHeight: '1.5rem' }}>
-    <b>Attach clipboard 📚</b><br />
-    Auto-converts to the best types<br />
-    <KeyStroke combo='Ctrl + Shift + V' sx={{ mt: 1, mb: 0.5 }} />
+    <b>Colar da área de transferência 📚</b><br />
+    Converte automaticamente para os melhores tipos<br />
+    <KeyStroke combo="Ctrl + Shift + V" sx={{ mt: 1, mb: 0.5 }} />
   </Box>;
 
 
@@ -22,10 +22,11 @@ function ButtonAttachClipboard(props: { isMobile?: boolean, onClick: () => void 
       <ContentPasteGoIcon />
     </IconButton>
   ) : (
-    <Tooltip disableInteractive variant='solid' placement='top-start' title={pasteClipboardLegend}>
-      <Button fullWidth variant='plain' color='neutral' startDecorator={<ContentPasteGoIcon />} onClick={props.onClick}
+    <Tooltip disableInteractive variant="solid" placement="top-start" title={pasteClipboardLegend}>
+      <Button fullWidth variant="plain" color="neutral" startDecorator={<ContentPasteGoIcon />}
+              onClick={props.onClick}
               sx={{ justifyContent: 'flex-start' }}>
-        Paste
+        Colar
       </Button>
     </Tooltip>
   );
