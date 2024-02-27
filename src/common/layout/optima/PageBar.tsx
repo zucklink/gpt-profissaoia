@@ -65,14 +65,27 @@ function CommonPageMenuItems(props: { onClose: () => void }) {
 
     {/* Preferences |...| Dark Mode Toggle */}
     {/*<Tooltip title={<KeyStroke combo='Ctrl + Shift + P' />}>*/}
-    <MenuItem onClick={handleShowSettings}>
+    {/*<MenuItem onClick={handleShowSettings}>*/}
+    {/*  <ListItemDecorator><SettingsIcon /></ListItemDecorator>*/}
+    {/*  Preferências*/}
+
+    {/*  <IconButton*/}
+    {/*    size='sm'*/}
+    {/*    variant='soft'*/}
+    {/*    onClick={handleToggleDarkMode}*/}
+    {/*    sx={{ ml: 'auto',  my: '-0.25rem' }}*/}
+    {/*  >*/}
+    {/*    {colorMode !== 'dark' ? <DarkModeIcon /> : <LightModeIcon />}*/}
+    {/*  </IconButton>*/}
+    {/*</MenuItem>*/}
+    <MenuItem>
       <ListItemDecorator><SettingsIcon /></ListItemDecorator>
-      Preferences
+      <Typography>Tema {colorMode}</Typography>
       <IconButton
         size='sm'
         variant='soft'
         onClick={handleToggleDarkMode}
-        sx={{ ml: 'auto', /*mr: '2px',*/ my: '-0.25rem' /* absorb the menuItem padding */ }}
+        sx={{ ml: 'auto',  my: '-0.25rem' }}
       >
         {colorMode !== 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
       </IconButton>
