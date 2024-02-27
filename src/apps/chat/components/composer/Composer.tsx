@@ -469,7 +469,8 @@ export function Composer(props: {
   const isReAct = chatModeId === 'generate-react';
   const isDraw = chatModeId === 'generate-image';
 
-  const showCall = isText || isAppend;
+  // const showCall = isText || isAppend;
+  const showCall = false;
 
   const buttonColor: ColorPaletteProp =
     assistantAbortible ? 'warning'
@@ -494,14 +495,14 @@ export function Composer(props: {
               : <TelegramIcon />;
 
   let textPlaceholder: string =
-    isDraw ? 'Describe an idea or a drawing...'
-      : isReAct ? 'Multi-step reasoning question...'
-        : isTextBeam ? 'Multi-chat with this persona...'
-          : props.isDeveloperMode ? 'Chat with me' + (isDesktop ? ' · drop source' : '') + ' · attach code...'
-            : props.capabilityHasT2I ? 'Chat · /react · /draw · drop files...'
-              : 'Chat · /react · drop files...';
+    isDraw ? 'Descreva uma ideia ou um desenho...'
+      : isReAct ? 'Pergunta de raciocínio em várias etapas...'
+        : isTextBeam ? 'Multi-chat com esta persona...'
+          : props.isDeveloperMode ? 'Converse comigo' + (isDesktop ? ' · solte o código fonte' : '') + ' · anexe o código...'
+            : props.capabilityHasT2I ? 'Chat · /react · /draw · solte arquivos...'
+              : 'Chat · /react · solte arquivos...';
   if (isDesktop && explainShiftEnter)
-    textPlaceholder += !enterIsNewline ? '\nShift+Enter to add a new line' : '\nShift+Enter to send';
+    textPlaceholder += !enterIsNewline ? '\nShift+Enter para adicionar uma nova linha' : '\nShift+Enter para enviar';
 
   return (
     <Box aria-label='User Message' component='section' sx={props.sx}>
@@ -734,7 +735,7 @@ export function Composer(props: {
                     endDecorator={<StopOutlinedIcon sx={{ fontSize: 18 }} />}
                     sx={{ animation: `${animationStopEnter} 0.1s ease-out` }}
                   >
-                    Stop
+                    Parar
                   </Button>
                 )}
 
@@ -746,13 +747,13 @@ export function Composer(props: {
                 </Tooltip>}
 
                 {/* Mode expander */}
-                <IconButton
-                  variant={assistantAbortible ? 'soft' : isDraw ? undefined : undefined}
-                  disabled={!props.conversationId || !chatLLMId || !!chatModeMenuAnchor}
-                  onClick={handleModeSelectorShow}
-                >
-                  <ExpandLessIcon />
-                </IconButton>
+                {/*<IconButton*/}
+                {/*  variant={assistantAbortible ? 'soft' : isDraw ? undefined : undefined}*/}
+                {/*  disabled={!props.conversationId || !chatLLMId || !!chatModeMenuAnchor}*/}
+                {/*  onClick={handleModeSelectorShow}*/}
+                {/*>*/}
+                {/*  <ExpandLessIcon />*/}
+                {/*</IconButton>*/}
               </ButtonGroup>
 
             </Box>
@@ -777,19 +778,19 @@ export function Composer(props: {
       </Grid>
 
       {/* Mode selector */}
-      {!!chatModeMenuAnchor && (
-        <ChatModeMenu
-          anchorEl={chatModeMenuAnchor} onClose={handleModeSelectorHide}
-          chatModeId={chatModeId} onSetChatModeId={handleModeChange}
-          capabilityHasTTI={props.capabilityHasT2I}
-        />
-      )}
+      {/*{!!chatModeMenuAnchor && (*/}
+      {/*  <ChatModeMenu*/}
+      {/*    anchorEl={chatModeMenuAnchor} onClose={handleModeSelectorHide}*/}
+      {/*    chatModeId={chatModeId} onSetChatModeId={handleModeChange}*/}
+      {/*    capabilityHasTTI={props.capabilityHasT2I}*/}
+      {/*  />*/}
+      {/*)}*/}
 
       {/* Camera */}
-      {cameraCaptureComponent}
+      {/*{cameraCaptureComponent}*/}
 
       {/* Actile */}
-      {actileComponent}
+      {/*{actileComponent}*/}
 
     </Box>
   );
