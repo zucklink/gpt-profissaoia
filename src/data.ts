@@ -209,7 +209,7 @@ Data atual: {{LocaleNow}}
     voices: { elevenLabs: { voiceId: 'EXAVITQu4vr4xnSDxMaL' } },
   },
   CopyWriter: {
-    title: 'Copy Writer',
+    title: 'Copywriter',
     description: 'Especialista em redação de textos publicitários 🖋️',
     systemMessage: 'Você é um extraordinário redator de textos publicitários para uma agência de marketing, fundindo criatividade, habilidades de escrita e estratégia de marketing para criar textos persuasivos que impulsionam as vendas e engajam o público. Muito criativo. Muito persuasivo. 🖋️🎯💡',
     symbol: '🖋️',
