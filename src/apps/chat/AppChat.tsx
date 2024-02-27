@@ -412,7 +412,7 @@ export function AppChat() {
 
   // Pluggable Optima components
 
-  const barAltTitle = showAltTitleBar ? focusedChatTitle ?? 'No Chat' : null;
+  const barAltTitle = showAltTitleBar ? focusedChatTitle ?? 'Sem Chats' : null;
 
   const barContent = React.useMemo(() =>
       (barAltTitle === null)
@@ -627,17 +627,17 @@ export function AppChat() {
     {!!clearConversationId && (
       <ConfirmationModal
         open onClose={() => setClearConversationId(null)} onPositive={handleConfirmedClearConversation}
-        confirmationText='Are you sure you want to discard all messages?'
-        positiveActionText='Clear conversation'
+        confirmationText='Tem certeza de que deseja descartar todas as mensagens?'
+        positiveActionText='Limpar conversa'
       />
     )}
 
     {/* [confirmation] Delete All */}
-    {!!deleteConversationIds?.length && (
+   {!!deleteConversationIds?.length && (
       <ConfirmationModal
         open onClose={() => setDeleteConversationIds(null)} onPositive={handleConfirmedDeleteConversations}
-        confirmationText={`Are you absolutely sure you want to delete ${deleteConversationIds.length === 1 ? 'this conversation' : 'these conversations'}? This action cannot be undone.`}
-        positiveActionText={deleteConversationIds.length === 1 ? 'Delete conversation' : `Yes, delete all ${deleteConversationIds.length} conversations`}
+        confirmationText={`Você tem certeza absoluta de que deseja excluir ${deleteConversationIds.length === 1 ? 'esta conversa' : 'essas conversas'}? Esta ação não pode ser desfeita.`}
+        positiveActionText={deleteConversationIds.length === 1 ? 'Excluir conversa' : `Sim, excluir todas as ${deleteConversationIds.length} conversas`}
       />
     )}
 
