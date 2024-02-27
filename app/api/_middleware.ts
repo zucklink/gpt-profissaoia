@@ -7,7 +7,7 @@ function isUrlAuthorized(referrer: string | null): boolean {
   return AUTHORIZED_URLS.some(authorizedUrl => referrer?.includes(authorizedUrl));
 }
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
     const referrer = request.headers.get('referer');
     const isInIframe = request.headers.get('sec-fetch-dest') === 'iframe';
