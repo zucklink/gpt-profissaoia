@@ -103,7 +103,7 @@ export function ChatFolderList(props: {
                       <ListItemDecorator>
                         <FolderIcon />
                       </ListItemDecorator>
-                      All
+                      Todos
                     </ListItemButton>
                   </ListItem>
 
