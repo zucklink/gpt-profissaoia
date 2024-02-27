@@ -37,7 +37,7 @@ export function AddFolderButton() {
       </ListItemDecorator>
       <InlineTextarea
         initialText=''
-        placeholder='Folder Name'
+        placeholder='Nome da Pasta'
         onEdit={handleCreateFolder}
         onCancel={handleCancelAddFolder}
         sx={{ ml: -1.5, mr: -0.5, flexGrow: 1, minWidth: 100 }}
@@ -60,7 +60,7 @@ export function AddFolderButton() {
         <ListItemDecorator>
           <AddIcon sx={{ '--Icon-fontSize': 'var(--joy-fontSize-xl)', pl: '0.125rem' }} />
         </ListItemDecorator>
-        New folder
+        Nova pasta
       </ListItemButton>
     </ListItem>
   );
