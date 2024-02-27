@@ -318,7 +318,7 @@ function ChatDrawerItem(props: {
                   </FadeInButton>
                 </Tooltip>
 
-                <Tooltip disableInteractive title='Export Chat'>
+                <Tooltip disableInteractive title='Exportar Chat'>
                   <FadeInButton size='sm' onClick={handleConversationExport}>
                     <FileDownloadOutlinedIcon />
                   </FadeInButton>
