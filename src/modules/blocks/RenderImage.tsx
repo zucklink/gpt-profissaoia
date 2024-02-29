@@ -90,7 +90,7 @@ export const RenderImage = (props: {
     <Box sx={{}}>
 
       <Sheet
-        variant='solid'
+        variant="solid"
         sx={{
           // style
           mx: 1.5,
@@ -125,25 +125,27 @@ export const RenderImage = (props: {
         )}
 
         {/* (overlay) Image Buttons */}
-        <Box className='overlay-buttons' sx={{ ...overlayButtonsSx, pt: 0.5, px: 0.5, gap: 0.5 }}>
+        <Box className="overlay-buttons" sx={{ ...overlayButtonsSx, pt: 0.5, px: 0.5, gap: 0.5 }}>
           {!!props.onRunAgain && (
-            <GoodTooltip title='Draw again'>
-              <IconButton variant='outlined' onClick={props.onRunAgain}>
+            <GoodTooltip title="Draw again">
+              <IconButton variant="outlined" onClick={props.onRunAgain}>
                 <ReplayIcon />
               </IconButton>
             </GoodTooltip>
           )}
 
           {!!alt && (
-            <GoodTooltip title={infoOpen ? 'Hide Prompt' : 'Show Prompt'}>
-              <IconButton variant={infoOpen ? 'solid' : 'soft'} onClick={() => setInfoOpen(open => !open)}>
+            <GoodTooltip title={infoOpen ? 'Esconder Prompt' : 'Mostrar Prompt'}>
+              <IconButton variant={infoOpen ? 'solid' : 'soft'}
+                          onClick={() => setInfoOpen(open => !open)}>
                 <InfoOutlinedIcon />
               </IconButton>
             </GoodTooltip>
           )}
 
-          <GoodTooltip title='Open in new tab'>
-            <IconButton variant='soft' component={Link} href={url} download={alt || 'image'} target='_blank'>
+          <GoodTooltip title="Abrir em nova aba">
+            <IconButton variant="soft" component={Link} href={url} download={alt || 'image'}
+                        target="_blank">
               <OpenInNewIcon />
             </IconButton>
           </GoodTooltip>
@@ -153,10 +155,11 @@ export const RenderImage = (props: {
       {/* Dalle Warning notice */}
       {isTempDalleUrl && showAlert && (
         <Alert
-          variant='soft' color='neutral'
+          variant="soft" color="neutral"
           startDecorator={<WarningRoundedIcon />}
           endDecorator={
-            <IconButton variant='soft' aria-label='Close Alert' onClick={() => setShowAlert(on => !on)} sx={{ my: -0.5 }}>
+            <IconButton variant="soft" aria-label="Close Alert"
+                        onClick={() => setShowAlert(on => !on)} sx={{ my: -0.5 }}>
               <CloseRoundedIcon />
             </IconButton>
           }
@@ -166,7 +169,8 @@ export const RenderImage = (props: {
           }}
         >
           <div>
-            <strong>Please Save Locally</strong> · OpenAI will delete this image link from their servers one hour after creation.
+            <strong>Salve Localmente</strong> · A OpenAI irá deletar este link de imagem de seus
+            servidores uma hora após a criação.
           </div>
         </Alert>
       )}

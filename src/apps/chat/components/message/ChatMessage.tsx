@@ -514,13 +514,13 @@ export function ChatMessage(props: {
             {!!props.onMessageEdit && (
               <MenuItem variant='plain' disabled={messageTyping} onClick={handleOpsEdit} sx={{ flex: 1 }}>
                 <ListItemDecorator><EditIcon /></ListItemDecorator>
-                {isEditing ? 'Discard' : 'Edit'}
+                {isEditing ? 'Descartar' : 'Editar'}
                 {/*{!isEditing && <span style={{ opacity: 0.5, marginLeft: '8px' }}>{doubleClickToEdit ? '(double-click)' : ''}</span>}*/}
               </MenuItem>
             )}
             <MenuItem onClick={handleOpsCopy} sx={{ flex: 1 }}>
               <ListItemDecorator><ContentCopyIcon /></ListItemDecorator>
-              Copy
+              Copiar
             </MenuItem>
           </Box>
           {/* Delete / Branch / Truncate */}
@@ -528,66 +528,66 @@ export function ChatMessage(props: {
           {!!props.onMessageDelete && (
             <MenuItem onClick={handleOpsDelete} disabled={false /*fromSystem*/}>
               <ListItemDecorator><ClearIcon /></ListItemDecorator>
-              Delete
-              <span style={{ opacity: 0.5 }}>message</span>
+              Apagar
+              <span style={{ opacity: 0.5 }}>mensagem</span>
             </MenuItem>
           )}
-          {!!props.onConversationBranch && (
-            <MenuItem onClick={handleOpsConversationBranch} disabled={fromSystem}>
-              <ListItemDecorator>
-                <ForkRightIcon />
-              </ListItemDecorator>
-              Branch
-              {!props.isBottom && <span style={{ opacity: 0.5 }}>from here</span>}
-            </MenuItem>
-          )}
-          {!!props.onConversationTruncate && (
-            <MenuItem onClick={handleOpsTruncate} disabled={props.isBottom}>
-              <ListItemDecorator><VerticalAlignBottomIcon /></ListItemDecorator>
-              Truncate
-              <span style={{ opacity: 0.5 }}>after this</span>
-            </MenuItem>
-          )}
+          {/*{!!props.onConversationBranch && (*/}
+          {/*  <MenuItem onClick={handleOpsConversationBranch} disabled={fromSystem}>*/}
+          {/*    <ListItemDecorator>*/}
+          {/*      <ForkRightIcon />*/}
+          {/*    </ListItemDecorator>*/}
+          {/*    Branch*/}
+          {/*    {!props.isBottom && <span style={{ opacity: 0.5 }}>from here</span>}*/}
+          {/*  </MenuItem>*/}
+          {/*)}*/}
+          {/*{!!props.onConversationTruncate && (*/}
+          {/*  <MenuItem onClick={handleOpsTruncate} disabled={props.isBottom}>*/}
+          {/*    <ListItemDecorator><VerticalAlignBottomIcon /></ListItemDecorator>*/}
+          {/*    Truncate*/}
+          {/*    <span style={{ opacity: 0.5 }}>after this</span>*/}
+          {/*  </MenuItem>*/}
+          {/*)}*/}
           {/* Diff Viewer */}
           {!!props.diffPreviousText && <ListDivider />}
-          {!!props.diffPreviousText && (
-            <MenuItem onClick={handleOpsToggleShowDiff}>
-              <ListItemDecorator><DifferenceIcon /></ListItemDecorator>
-              Show difference
-              <Switch checked={showDiff} onChange={handleOpsToggleShowDiff} sx={{ ml: 'auto' }} />
-            </MenuItem>
-          )}
+          {/*{!!props.diffPreviousText && (*/}
+          {/*  <MenuItem onClick={handleOpsToggleShowDiff}>*/}
+          {/*    <ListItemDecorator><DifferenceIcon /></ListItemDecorator>*/}
+          {/*    Show difference*/}
+          {/*    <Switch checked={showDiff} onChange={handleOpsToggleShowDiff} sx={{ ml: 'auto' }} />*/}
+          {/*  </MenuItem>*/}
+          {/*)}*/}
           {/* Diagram / Draw / Speak */}
           {!!props.onTextDiagram && <ListDivider />}
           {!!props.onTextDiagram && (
             <MenuItem onClick={handleOpsDiagram} disabled={!couldDiagram}>
               <ListItemDecorator><AccountTreeIcon color='success' /></ListItemDecorator>
-              Diagram ...
+              Diagrama ...
             </MenuItem>
           )}
           {!!props.onTextImagine && (
             <MenuItem onClick={handleOpsImagine} disabled={!couldImagine || props.isImagining}>
               <ListItemDecorator>{props.isImagining ? <CircularProgress size='sm' /> : <FormatPaintIcon color='success' />}</ListItemDecorator>
-              Draw ...
+              Desenhar ...
             </MenuItem>
           )}
-          {!!props.onTextSpeak && (
-            <MenuItem onClick={handleOpsSpeak} disabled={!couldSpeak || props.isSpeaking}>
-              <ListItemDecorator>{props.isSpeaking ? <CircularProgress size='sm' /> : <RecordVoiceOverIcon color='success' />}</ListItemDecorator>
-              Speak
-            </MenuItem>
-          )}
+          {/*{!!props.onTextSpeak && (*/}
+          {/*  <MenuItem onClick={handleOpsSpeak} disabled={!couldSpeak || props.isSpeaking}>*/}
+          {/*    <ListItemDecorator>{props.isSpeaking ? <CircularProgress size='sm' /> : <RecordVoiceOverIcon color='success' />}</ListItemDecorator>*/}
+          {/*    Speak*/}
+          {/*  </MenuItem>*/}
+          {/*)}*/}
           {/* Restart/try */}
           {!!props.onConversationRestartFrom && <ListDivider />}
           {!!props.onConversationRestartFrom && (
             <MenuItem onClick={handleOpsConversationRestartFrom}>
               <ListItemDecorator>{fromAssistant ? <ReplayIcon color='primary' /> : <TelegramIcon color='primary' />}</ListItemDecorator>
               {!fromAssistant
-                ? <>Restart <span style={{ opacity: 0.5 }}>from here</span></>
+                ? <>Reiniciar <span style={{ opacity: 0.5 }}>daqui</span></>
                 : !props.isBottom
-                  ? <>Retry <span style={{ opacity: 0.5 }}>from here</span></>
+                  ? <>Tentar de novo <span style={{ opacity: 0.5 }}>daquui</span></>
                   : <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', gap: 1 }}>
-                    Retry
+                    Tentar novamente
                     <KeyStroke combo='Ctrl + Shift + R' />
                   </Box>}
               {labsChatBeam && (
