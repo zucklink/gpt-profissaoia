@@ -469,7 +469,7 @@ export const useConversation = (conversationId: DConversationId | null) => useCh
   const conversationIdx = conversation ? conversations.findIndex(_c => _c.id === conversation.id) : -1;
   const title = conversation ? conversationTitle(conversation) : null;
   const isChatEmpty = conversation ? !conversation.messages.length : true;
-  const isDeveloper = conversation?.systemPurposeId === 'Developer';
+  const isDeveloper = conversation?.systemPurposeId === 'DeveloperPreview';
   const areChatsEmpty = isChatEmpty && conversations.length < 2;
   const newConversationId: DConversationId | null = (conversations.length && !conversations[0].messages.length) ? conversations[0].id : null;
 
