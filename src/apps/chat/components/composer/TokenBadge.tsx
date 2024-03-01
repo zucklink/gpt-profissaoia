@@ -21,23 +21,23 @@ export function tokensPrettyMath(tokenLimit: number | 0, directTokens: number, h
 
   // no limit: show used tokens only
   if (!tokenLimit) {
-    message += `Requested: ${usedTokens.toLocaleString()} tokens`;
+    message += `Requisição: ${usedTokens.toLocaleString()} tokens`;
   }
   // has full information (d + i < l)
   else if (historyTokens || responseMaxTokens) {
     message +=
-      `${Math.abs(remainingTokens).toLocaleString()} ${remainingTokens >= 0 ? 'available' : 'excess'} message tokens\n\n` +
-      ` = Model max tokens: ${alignRight(tokenLimit)}\n` +
-      `     - This message: ${alignRight(directTokens)}\n` +
-      `          - History: ${alignRight(historyTokens || 0)}\n` +
-      `     - Max response: ${alignRight(responseMaxTokens || 0)}`;
+      `${Math.abs(remainingTokens).toLocaleString()} tokens de mensagem ${remainingTokens >= 0 ? 'disponíveis' : 'excedidos'}\n\n` +
+      ` = Máximo de tokens do modelo: ${alignRight(tokenLimit)}\n` +
+      `              - Esta mensagem: ${alignRight(directTokens)}\n` +
+      `                  - Histórico: ${alignRight(historyTokens || 0)}\n` +
+      `            - Resposta máxima: ${alignRight(responseMaxTokens || 0)}`;
   }
   // Cleaner mode: d + ? < R (total is the remaining in this case)
   else {
     message +=
-      `${(tokenLimit + usedTokens).toLocaleString()} available tokens after deleting this\n\n` +
-      ` = Currently free: ${alignRight(tokenLimit)}\n` +
-      `   + This message: ${alignRight(usedTokens)}`;
+      `${(tokenLimit + usedTokens).toLocaleString()} tokens disponíveis após deletar isto\n\n` +
+      ` = Atualmente livre: ${alignRight(tokenLimit)}\n` +
+      `    + Esta mensagem: ${alignRight(usedTokens)}`;
   }
 
   const color: ColorPaletteProp =
@@ -51,7 +51,12 @@ export function tokensPrettyMath(tokenLimit: number | 0, directTokens: number, h
 }
 
 
-export const TokenTooltip = (props: { message: string | null, color: ColorPaletteProp, placement?: 'top' | 'top-end', children: React.JSX.Element }) =>
+export const TokenTooltip = (props: {
+  message: string | null,
+  color: ColorPaletteProp,
+  placement?: 'top' | 'top-end',
+  children: React.JSX.Element
+}) =>
   <Tooltip
     placement={props.placement}
     variant={props.color !== 'primary' ? 'solid' : 'soft'} color={props.color}
@@ -80,7 +85,11 @@ function TokenBadge(props: {
   showExcess?: boolean, absoluteBottomRight?: boolean, inline?: boolean,
 }) {
 
-  const { message, color, remainingTokens } = tokensPrettyMath(props.limit, props.direct, props.history, props.responseMax);
+  const {
+    message,
+    color,
+    remainingTokens,
+  } = tokensPrettyMath(props.limit, props.direct, props.history, props.responseMax);
 
   // show the direct tokens, unless we exceed the limit and 'showExcess' is enabled
   const value = (props.showExcess && (props.limit && remainingTokens <= 0))
@@ -89,7 +98,7 @@ function TokenBadge(props: {
 
   return (
     <Badge
-      variant='solid' color={color} max={100000}
+      variant="solid" color={color} max={100000}
       invisible={!props.direct && remainingTokens >= 0}
       badgeContent={
         <TokenTooltip color={color} message={message}>
@@ -104,7 +113,10 @@ function TokenBadge(props: {
         badge: {
           sx: {
             fontFamily: 'code',
-            ...((props.absoluteBottomRight || props.inline) && { position: 'static', transform: 'none' }),
+            ...((props.absoluteBottomRight || props.inline) && {
+              position: 'static',
+              transform: 'none',
+            }),
           },
         },
       }}

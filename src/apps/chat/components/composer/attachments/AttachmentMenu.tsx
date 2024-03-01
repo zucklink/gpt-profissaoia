@@ -136,7 +136,7 @@ export function AttachmentMenu(props: {
             <Radio checked={idx === aConverterIdx} />
           </ListItemDecorator>
           {c.unsupported
-            ? <Box>Unsupported 🤔 <Typography level='body-xs'>{c.name}</Typography></Box>
+            ? <Box>Não suportado 🤔 <Typography level='body-xs'>{c.name}</Typography></Box>
             : c.name}
         </MenuItem>,
       )}
@@ -174,11 +174,11 @@ export function AttachmentMenu(props: {
       {/*</MenuItem>*/}
       <MenuItem onClick={handleInlineText} disabled={!isOutputTextInlineable}>
         <ListItemDecorator><VerticalAlignBottomIcon /></ListItemDecorator>
-        Inline text
+        Texto inline
       </MenuItem>
       <MenuItem onClick={handleRemove}>
         <ListItemDecorator><ClearIcon /></ListItemDecorator>
-        Remove
+        Remover
       </MenuItem>
 
     </CloseableMenu>

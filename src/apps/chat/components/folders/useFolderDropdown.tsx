@@ -72,7 +72,7 @@ export function useFolderDropdown(conversationId: DConversationId | null) {
         items={folderItems}
         value={currentFolderId}
         onChange={handleFolderChange}
-        placeholder='Assign to folder'
+        placeholder='Atribuir uma pasta'
         showSymbols
       />
     );

@@ -29,9 +29,9 @@ const ellipsizeLabel = (label?: string) => {
   if (!label)
     return '';
   return ellipsizeMiddle((label || '')
-    .replace(/https?:\/\/(?:www\.)?/, ''), 30)
-    .replace(/\/$/, '')
-    .replace('…', '…\n…');
+  .replace(/https?:\/\/(?:www\.)?/, ''), 30)
+  .replace(/\/$/, '')
+  .replace('…', '…\n…');
 };
 
 
@@ -40,7 +40,7 @@ const ellipsizeLabel = (label?: string) => {
  */
 const LoadingIndicator = React.forwardRef((props: { label: string }, _ref) =>
   <Sheet
-    color='success' variant='soft'
+    color="success" variant="soft"
     sx={{
       border: '1px solid',
       borderColor: 'success.solidBg',
@@ -52,8 +52,8 @@ const LoadingIndicator = React.forwardRef((props: { label: string }, _ref) =>
       py: 0.5,
     }}
   >
-    <CircularProgress color='success' size='sm' />
-    <Typography level='title-sm' sx={{ whiteSpace: 'nowrap' }}>
+    <CircularProgress color="success" size="sm" />
+    <Typography level="title-sm" sx={{ whiteSpace: 'nowrap' }}>
       {ellipsizeLabel(props.label)}
     </Typography>
   </Sheet>,
@@ -147,14 +147,14 @@ export function AttachmentItem(props: {
   if (isInputLoading || isOutputLoading) {
     color = 'success';
   } else if (isInputError) {
-    tooltip = `Issue loading the attachment: ${attachment.inputError}\n\n${tooltip}`;
+    tooltip = `Problema ao carregar o anexo: ${attachment.inputError}\n\n${tooltip}`;
     color = 'danger';
   } else if (showWarning) {
     tooltip = props.menuShown
       ? null
       : isUnconvertible
-        ? `Attachments of type '${attachment.input?.mimeType}' are not supported yet. You can open a feature request on GitHub.\n\n${tooltip}`
-        : `Not compatible with the selected LLM or not supported. Please select another format.\n\n${tooltip}`;
+        ? `Anexos do tipo '${attachment.input?.mimeType}' ainda não são suportados. Você pode abrir uma solicitação de recurso no GitHub.\n\n${tooltip}`
+        : `Não é compatível com o LLM selecionado ou não é suportado. Por favor, selecione outro formato.\n\n${tooltip}`;
     color = 'warning';
   } else {
     // all good
@@ -176,7 +176,7 @@ export function AttachmentItem(props: {
         ? <LoadingIndicator label={attachment.label} />
         : (
           <Button
-            size='sm'
+            size="sm"
             variant={variant} color={color}
             onClick={handleToggleMenu}
             sx={{
@@ -194,8 +194,8 @@ export function AttachmentItem(props: {
               : <>
                 {attachmentConverterIcon(attachment)}
                 {isOutputLoading
-                  ? <>Converting <CircularProgress color='success' size='sm' /></>
-                  : <Typography level='title-sm' sx={{ whiteSpace: 'nowrap' }}>
+                  ? <>Converting <CircularProgress color="success" size="sm" /></>
+                  : <Typography level="title-sm" sx={{ whiteSpace: 'nowrap' }}>
                     {attachmentLabelText(attachment)}
                   </Typography>}
               </>}

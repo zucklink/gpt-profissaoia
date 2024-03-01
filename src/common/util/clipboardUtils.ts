@@ -8,7 +8,8 @@ export function copyToClipboard(text: string, typeLabel: string) {
     .then(() => {
       addSnackbar({
         key: 'copy-to-clipboard',
-        message: `${typeLabel} copied to clipboard`,
+        // message: `${typeLabel} copiado para área de transferência`,
+        message: 'Conteúdo copiado para área de transferência',
         type: 'success',
         closeButton: false,
         overrides: {
@@ -17,7 +18,7 @@ export function copyToClipboard(text: string, typeLabel: string) {
       });
     })
     .catch((err) => {
-      console.error('Failed to copy message: ', err);
+      console.error('Falha ao copiar mensagem: ', err);
     });
 }
 
@@ -30,7 +31,7 @@ export async function getClipboardItems(): Promise<ClipboardItem[] | null> {
   try {
     return await window.navigator.clipboard.read();
   } catch (error: any) {
-    console.warn('Failed to read clipboard: ', error);
+    console.warn('Falha ao ler área de transferência: ', error);
     return null;
   }
 }

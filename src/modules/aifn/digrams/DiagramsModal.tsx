@@ -47,8 +47,8 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
   // state
   const [showOptions, setShowOptions] = React.useState(true);
   const [diagramCode, setDiagramCode] = React.useState<string | null>(null);
-  const [diagramType, diagramComponent] = useFormRadio<DiagramType>('auto', diagramTypes, 'Visualize');
-  const [diagramLanguage, languageComponent] = useFormRadio<DiagramLanguage>('plantuml', diagramLanguages, 'Style');
+  const [diagramType, diagramComponent] = useFormRadio<DiagramType>('auto', diagramTypes, 'Visualizar');
+  const [diagramLanguage, languageComponent] = useFormRadio<DiagramLanguage>('plantuml', diagramLanguages, 'Estilo');
   const [customInstruction, setCustomInstruction] = React.useState<string>('');
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [abortController, setAbortController] = React.useState<AbortController | null>(null);
@@ -70,16 +70,17 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
       return;
 
     const conversation = useChatStore.getState().conversations.find(c => c.id === conversationId);
-    if (!diagramType || !diagramLanguage || !diagramLlm || !conversation)
-      return setErrorMessage('Invalid diagram Type, Language, Generator, or conversation.');
-
+    if (!diagramType || !diagramLanguage || !diagramLlm || !conversation) {
+      return setErrorMessage('Tipo de diagrama, idioma, gerador ou conversa inválidos.');
+    }
     const systemMessage = conversation?.messages?.length ? conversation.messages[0] : null;
-    if (systemMessage?.role !== 'system')
-      return setErrorMessage('No System message in this conversation');
+    if (systemMessage?.role !== 'system') {
+      return setErrorMessage('Nenhuma mensagem do sistema nesta conversa');
+    }
 
     setErrorMessage(null);
 
-    let diagramCode: string = 'Loading...';
+    let diagramCode: string = 'Carregando...';
     setDiagramCode(diagramCode);
 
     const stepAbortController = new AbortController();
@@ -115,7 +116,7 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
 
   const handleInsertAndClose = () => {
     if (!diagramCode)
-      return setErrorMessage('Nothing to add to the conversation.');
+      return setErrorMessage('Nada para adicionar à conversa.');
 
     const diagramMessage = createDMessage('assistant', diagramCode);
     // diagramMessage.purposeId = conversation.systemPurposeId;
@@ -127,12 +128,12 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
 
 
   return <GoodModal
-    title='Generate Diagram' noTitleBar
+    title='Generar Diagrama' noTitleBar
     open onClose={props.onClose}
     sx={{ maxWidth: { xs: '100vw', md: '95vw' } }}
     startButton={
       <Button variant='soft' color='success' disabled={!diagramCode || !!abortController} endDecorator={<TelegramIcon />} onClick={handleInsertAndClose}>
-        Add To Chat
+        Adicionar ao chat
       </Button>
     }
   >
@@ -152,9 +153,8 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
         </Grid>
         <Grid xs={12} md={6}>
           <FormControl>
-            <FormLabel>Custom Instruction</FormLabel>
-            <Input title='Custom Instruction' placeholder='e.g. visualize as state' value={customInstruction} onChange={(e) => setCustomInstruction(e.target.value)} />
-          </FormControl>
+            <FormLabel>Instrução personalizada</FormLabel>
+            <Input title='Instrução personalizada' placeholder='ex. visualizar como estado' value={customInstruction} onChange={(e) => setCustomInstruction(e.target.value)} />          </FormControl>
         </Grid>
       </Grid>
     )}
@@ -168,7 +168,7 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
         endDecorator={abortController ? <StopOutlinedIcon /> : diagramCode ? <ReplayIcon /> : <AccountTreeIcon />}
         sx={{ minWidth: 200 }}
       >
-        {abortController ? 'Stop' : diagramCode ? 'Regenerate' : 'Generate'}
+        {abortController ? 'Parar' : diagramCode ? 'Gerar novamente' : 'Gerar'}
       </Button>
       <IconButton onClick={() => setShowOptions(options => !options)}>
         {showOptions ? <ExpandLessIcon /> : <ExpandMoreIcon />}

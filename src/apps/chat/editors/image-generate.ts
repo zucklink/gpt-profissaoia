@@ -1,4 +1,7 @@
-import { getActiveTextToImageProviderOrThrow, t2iGenerateImageOrThrow } from '~/modules/t2i/t2i.client';
+import {
+  getActiveTextToImageProviderOrThrow,
+  t2iGenerateImageOrThrow,
+} from '~/modules/t2i/t2i.client';
 
 import { ConversationManager } from '~/common/chats/ConversationHandler';
 import { TextToImageProvider } from '~/common/components/useCapabilities';
@@ -27,7 +30,7 @@ export async function runImageGenerationUpdatingState(conversationId: string, im
     imageText = imageText.replace(/x(\d+)$|\[(\d+)]$/, '').trim(); // Remove the "xN" or "[N]" part from the imageText
 
   const assistantMessageId = handler.messageAppendAssistant(
-    `Give me ${t2iProvider.vendor === 'openai' ? 'a dozen' : 'a few'} seconds while I draw ${imageText?.length > 20 ? 'that' : '"' + imageText + '"'}...`,
+    `Me dê ${t2iProvider.vendor === 'openai' ? 'alguns' : 'poucos'} segundos enquanto eu desenho ${imageText?.length > 20 ? 'isso' : '"' + imageText + '"'}...`,
     '', undefined,
   );
   handler.messageEdit(assistantMessageId, { originLLM: t2iProvider.painter }, false);
@@ -36,7 +39,10 @@ export async function runImageGenerationUpdatingState(conversationId: string, im
     const imageUrls = await t2iGenerateImageOrThrow(t2iProvider, imageText, repeat);
     handler.messageEdit(assistantMessageId, { text: imageUrls.join('\n'), typing: false }, true);
   } catch (error: any) {
-    const errorMessage = error?.message || error?.toString() || 'Unknown error';
-    handler.messageEdit(assistantMessageId, { text: `[Issue] Sorry, I couldn't create an image for you. ${errorMessage}`, typing: false }, false);
+    const errorMessage = error?.message || error?.toString() || 'Erro desconhecido';
+    handler.messageEdit(assistantMessageId, {
+      text: `[Problema] Desculpe, não consegui criar uma imagem para você. ${errorMessage}`,
+      typing: false,
+    }, false);
   }
 }
