@@ -80,7 +80,7 @@ function LLMDropdown(props: {
     // console.log('llmItems', llmItems);
     llmItems = {};
     llmItems["openai-gpt-4-0125-preview"] = {
-      title: "GPT-4 Turbo (0125) 🌟",
+      title: "GPT-4 Turbo",
     };
     // llmItems["openai-gpt-3.5-turbo-0125"] = {
     //   title: "GPT-4 Turbo (0125) 🌟",

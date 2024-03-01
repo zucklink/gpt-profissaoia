@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
-import { Box, Checkbox, Divider } from '@mui/joy';
+import { Box, Checkbox, Divider, Typography } from '@mui/joy';
 
 import { GoodModal } from '~/common/components/GoodModal';
 import { runWhenIdle } from '~/common/util/pwaUtils';
@@ -13,6 +13,13 @@ import { createModelSourceForDefaultVendor, findVendorById } from '../vendors/ve
 import { LLMOptionsModal } from './LLMOptionsModal';
 import { ModelsList } from './ModelsList';
 import { ModelsSourceSelector } from './ModelsSourceSelector';
+import Image from 'next/image';
+import {
+  isValidOpenAIApiKey,
+  ModelVendorOpenAI,
+} from '~/modules/llms/vendors/openai/openai.vendor';
+import { useLlmUpdateModels } from '~/modules/llms/vendors/useLlmUpdateModels';
+import { useSourceSetup } from '~/modules/llms/vendors/useSourceSetup';
 
 
 function VendorSourceSetup(props: { source: DModelSource }) {
@@ -64,15 +71,48 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
       addSource(createModelSourceForDefaultVendor(sources));
   }, [autoAddTrigger]);
 
+  // Execute the provided code when the modal is shown
+  const { source, sourceHasLLMs, access, updateSetup } =
+    // useSourceSetup(activeSource?.id, ModelVendorOpenAI);
+    useSourceSetup("openai", ModelVendorOpenAI);
+
+  // derived state
+  const { oaiKey, oaiOrg, oaiHost, heliKey, moderationCheck } = access;
+
+  const needsUserKey = !ModelVendorOpenAI.hasBackendCap?.();
+  const keyValid = isValidOpenAIApiKey(oaiKey);
+  const keyError = (/*needsUserKey ||*/ !!oaiKey) && !keyValid;
+  const shallFetchSucceed = oaiKey ? keyValid : !needsUserKey;
+
+  const { isFetching, refetch, isError, error } =
+    useLlmUpdateModels(ModelVendorOpenAI, access, !sourceHasLLMs && shallFetchSucceed, source);
+
+  React.useEffect(() => {
+    if (showModelsSetup && activeSource?.vId === ModelVendorOpenAI.id) {
+      // derived state
+      const { oaiKey, oaiOrg, oaiHost, heliKey, moderationCheck } = access;
+
+      const needsUserKey = !ModelVendorOpenAI.hasBackendCap?.();
+      const keyValid = isValidOpenAIApiKey(oaiKey);
+      const keyError = (/*needsUserKey ||*/ !!oaiKey) && !keyValid;
+      const shallFetchSucceed = oaiKey ? keyValid : !needsUserKey;
+
+      // fetch models
+      if (!sourceHasLLMs && shallFetchSucceed) {
+        refetch();
+      }
+    }
+  }, [showModelsSetup, activeSource, sourceHasLLMs, shallFetchSucceed, refetch]);
+
 
   return <>
 
     {/* Sources Setup */}
     {showModelsSetup && <GoodModal
-      title={<>Configure <b>AI Models</b></>}
+      title={<>GPT <b>Profissão IA</b></>}
       startButton={
         multiSource ? <Checkbox
-          label='All Services' sx={{ my: 'auto' }}
+          label="All Services" sx={{ my: 'auto' }}
           checked={showAllSources} onChange={() => setShowAllSources(all => !all)}
         /> : undefined
       }
@@ -83,41 +123,56 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
       }}
     >
 
-      <ModelsSourceSelector selectedSourceId={selectedSourceId} setSelectedSourceId={setSelectedSourceId} />
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Image src="/images/llms/openai-2.svg" height={200} width={200} alt={"Powered by OpenAI"}/>
+        <Typography level="h2" sx={{ textAlign: 'center' }}>
+          GPT Profissão IA
+        </Typography>
+        <Typography level="h3" sx={{ textAlign: 'center' }}>
+          Powered by OpenAI
+        </Typography>
+      </Box>
 
-      {!!activeSource && <Divider />}
+      {/*<ModelsSourceSelector selectedSourceId={selectedSourceId} setSelectedSourceId={setSelectedSourceId} />*/}
 
-      {!!activeSource && (
-        <Box sx={{ display: 'grid', gap: 'var(--Card-padding)' }}>
-          <VendorSourceSetup source={activeSource} />
-        </Box>
-      )}
+      {/*{!!activeSource && <Divider />}*/}
 
-      {!!llmCount && <Divider />}
+      {/*{!!activeSource && (*/}
+      {/*  <Box sx={{ display: 'grid', gap: 'var(--Card-padding)' }}>*/}
+      {/*    <VendorSourceSetup source={activeSource} />*/}
+      {/*  </Box>*/}
+      {/*)}*/}
 
-      {!!llmCount && (
-        <ModelsList
-          filterSourceId={showAllSources ? null : selectedSourceId}
-          onOpenLLMOptions={openLlmOptions}
-          sx={{
-            // works in tandem with the parent (GoodModal > Dialog) overflow: 'auto'
-            minHeight: '6rem',
-            overflowY: 'auto',
+      {/*{!!llmCount && <Divider />}*/}
 
-            // style (list variant=outlined)
-            '--ListItem-paddingY': '0rem',
-            '--ListItem-paddingRight': '0.5rem', // instead of 0.75
-            backgroundColor: 'rgb(var(--joy-palette-neutral-lightChannel) / 20%)',
-            borderRadius: 'md',
+      {/*{!!llmCount && (*/}
+      {/*  <ModelsList*/}
+      {/*    filterSourceId={showAllSources ? null : selectedSourceId}*/}
+      {/*    onOpenLLMOptions={openLlmOptions}*/}
+      {/*    sx={{*/}
+      {/*      // works in tandem with the parent (GoodModal > Dialog) overflow: 'auto'*/}
+      {/*      minHeight: '6rem',*/}
+      {/*      overflowY: 'auto',*/}
 
-            // [mobile] a bit less padding
-            '@media (max-width: 900px)': {
-              '--ListItem-paddingLeft': '0.5rem',
-              '--ListItem-paddingRight': '0.25rem',
-            },
-          }}
-        />
-      )}
+      {/*      // style (list variant=outlined)*/}
+      {/*      '--ListItem-paddingY': '0rem',*/}
+      {/*      '--ListItem-paddingRight': '0.5rem', // instead of 0.75*/}
+      {/*      backgroundColor: 'rgb(var(--joy-palette-neutral-lightChannel) / 20%)',*/}
+      {/*      borderRadius: 'md',*/}
+
+      {/*      // [mobile] a bit less padding*/}
+      {/*      '@media (max-width: 900px)': {*/}
+      {/*        '--ListItem-paddingLeft': '0.5rem',*/}
+      {/*        '--ListItem-paddingRight': '0.25rem',*/}
+      {/*      },*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*)}*/}
 
       <Divider />
 
