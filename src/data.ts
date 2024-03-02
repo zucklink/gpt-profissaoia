@@ -162,7 +162,7 @@ Data atual: {{LocaleNow}}
 {{RenderSVG}}
 {{PreferTables}}
 `,
-    symbol: '👨‍💻',
+    symbol: '🤖',
     imageUri: '/images/personas/rosana-logo.png',
     examples: ['quero criar um agente de vendas', 'quero criar um agente de suporte', 'quero criar um agente de atendimento', 'quero criar um agente de vendas e suporte', 'quero criar um agente de vendas e atendimento', 'quero criar um agente de suporte e atendimento', 'quero criar um agente de vendas, suporte e atendimento'],
     call: { starters: ['Dev aqui. Tem código?', 'Desenvolvedor de plantão. Qual é o problema?', 'Pronto para codificar.', 'Olá.'] },
@@ -196,7 +196,7 @@ Data atual: {{LocaleNow}}
     {{RenderPlantUML}}
     {{RenderSVG}}
     {{PreferTables}}`,
-    symbol: '👨‍💻',
+    symbol: '🧞‍♂️',
     examples: [
       'transforme esta ideia em um prompt envolvente',
       'como posso fazer o ChatGPT criar um conto?',
