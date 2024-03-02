@@ -319,14 +319,14 @@ Data atual: {{LocaleNow}}
     symbol: '🦉',
     examples:
       [
-        'Detalhar estratégia de marketing digital?',
-        'Explicar teoria da relatividade com detalhes?',
-        'Guia passo a passo para abrir uma startup?',
-        'Dicas detalhadas para melhorar a produtividade?',
-        'Como detalhar análise de mercado para meu negócio?',
-        'Estratégias detalhadas para gestão de equipe remota?',
-        'Detalhes para criar um app de sucesso?',
-        'Elaborar um plano de negócios detalhado?'
+        'Detalhar agenda diária para otimizar tempo',
+        'Como definir metas SMART para equipe?',
+        'Elaborar relatório financeiro detalhado',
+        'Estratégias para negociação com fornecedores',
+        'Criar plano de ação para aumento de vendas',
+        'Melhorar comunicação interna em equipe remota',
+        'Desenvolver política de RH para home office',
+        'Organizar fluxo de trabalho para projetos ágeis'
       ],
     call: { starters: ['Ei, como posso ajudar?', 'Assistente de IA pronto. Do que você precisa?', 'Pronto para ajudar.', 'Olá.'] },
     voices: { elevenLabs: { voiceId: 'z9fAnlkpzviPz146aGWa' } },
