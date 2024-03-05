@@ -284,7 +284,7 @@ function ChatDrawerItem(props: {
             {/* Current Folder color, and change initiator */}
             {!deleteArmed && <>
               {(folder !== undefined) && <>
-                <Tooltip disableInteractive title={folder ? `Change Folder (${folder.title})` : 'Add to Folder'}>
+                <Tooltip disableInteractive title={folder ? `Alterar Pasta (${folder.title})` : 'Adicionar à Pasta'}>
                   {folder ? (
                     <IconButton size='sm' onClick={handleFolderChangeBegin}>
                       <FolderIcon style={{ color: folder.color || 'inherit' }} />
@@ -299,24 +299,24 @@ function ChatDrawerItem(props: {
                 {/*<Divider orientation='vertical' sx={{ my: 1, opacity: 0.5 }} />*/}
               </>}
 
-              <Tooltip disableInteractive title='Rename'>
+              <Tooltip disableInteractive title='Renomear'>
                 <FadeInButton size='sm' disabled={isEditingTitle || isAutoEditingTitle} onClick={handleTitleEditBegin}>
                   <EditIcon />
                 </FadeInButton>
               </Tooltip>
 
               {!isNew && <>
-                <Tooltip disableInteractive title='Auto-Title'>
+                <Tooltip disableInteractive title='Auto-Título'>
                   <FadeInButton size='sm' disabled={isEditingTitle || isAutoEditingTitle} onClick={handleTitleEditAuto}>
                     <AutoFixHighIcon />
                   </FadeInButton>
                 </Tooltip>
 
-                <Tooltip disableInteractive title='Branch'>
-                  <FadeInButton size='sm' onClick={handleConversationBranch}>
-                    <ForkRightIcon />
-                  </FadeInButton>
-                </Tooltip>
+                {/*<Tooltip disableInteractive title='Branch'>*/}
+                {/*  <FadeInButton size='sm' onClick={handleConversationBranch}>*/}
+                {/*    <ForkRightIcon />*/}
+                {/*  </FadeInButton>*/}
+                {/*</Tooltip>*/}
 
                 <Tooltip disableInteractive title='Exportar Chat'>
                   <FadeInButton size='sm' onClick={handleConversationExport}>
@@ -333,14 +333,14 @@ function ChatDrawerItem(props: {
             {/* Delete [armed, arming] buttons */}
             {/*{!searchFrequency && <>*/}
             {deleteArmed && (
-              <Tooltip disableInteractive title='Confirm Deletion'>
+              <Tooltip disableInteractive title='Confirma Exclusão'>
                 <FadeInButton key='btn-del' variant='solid' color='success' size='sm' onClick={handleConversationDelete} sx={{ opacity: 1, mr: 0.5 }}>
                   <DeleteForeverIcon sx={{ color: 'danger.solidBg' }} />
                 </FadeInButton>
               </Tooltip>
             )}
 
-            <Tooltip disableInteractive title={deleteArmed ? 'Cancel Delete' : 'Delete'}>
+            <Tooltip disableInteractive title={deleteArmed ? 'Cancelar Exclusão' : 'Excluir'}>
               <FadeInButton key='btn-arm' size='sm' onClick={deleteArmed ? handleDeleteButtonHide : handleDeleteButtonShow} sx={deleteArmed ? { opacity: 1 } : {}}>
                 {deleteArmed ? <CloseRoundedIcon /> : <DeleteOutlineIcon />}
               </FadeInButton>
