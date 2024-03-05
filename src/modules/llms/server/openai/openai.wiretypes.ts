@@ -30,6 +30,7 @@ export namespace OpenAIWire {
       function_call?: 'auto' | 'none' | {
         name: string;
       },
+      user?: string | null;
     }
 
     export interface RequestMessage {

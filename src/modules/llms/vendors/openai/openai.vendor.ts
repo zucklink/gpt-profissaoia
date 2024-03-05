@@ -32,6 +32,7 @@ export interface LLMOptionsOpenAI {
   llmRef: string;
   llmTemperature: number;
   llmResponseTokens: number | null;
+  user: string | null;
 }
 
 export const ModelVendorOpenAI: IModelVendor<SourceSetupOpenAI, OpenAIAccessSchema, LLMOptionsOpenAI> = {
@@ -70,7 +71,7 @@ export const ModelVendorOpenAI: IModelVendor<SourceSetupOpenAI, OpenAIAccessSche
 
   // Chat Generate (non-streaming) with Functions
   rpcChatGenerateOrThrow: async (access, llmOptions, messages, functions, forceFunctionName, maxTokens) => {
-    const { llmRef, llmTemperature, llmResponseTokens } = llmOptions;
+    const { llmRef, llmTemperature, llmResponseTokens , user} = llmOptions;
     try {
       return await apiAsync.llmOpenAI.chatGenerateWithFunctions.mutate({
         access,
@@ -82,6 +83,7 @@ export const ModelVendorOpenAI: IModelVendor<SourceSetupOpenAI, OpenAIAccessSche
         functions: functions ?? undefined,
         forceFunctionName: forceFunctionName ?? undefined,
         history: messages,
+        user: user ?? null,
       }) as VChatMessageOrFunctionCallOut;
     } catch (error: any) {
       const errorMessage = error?.message || error?.toString() || 'OpenAI Chat Generate Error';

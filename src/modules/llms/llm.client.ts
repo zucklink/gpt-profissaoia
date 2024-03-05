@@ -63,6 +63,7 @@ export async function llmStreamingChatGenerate<TSourceSetup = unknown, TAccess =
   forceFunctionName: string | null,
   abortSignal: AbortSignal,
   onUpdate: (update: StreamingClientUpdate, done: boolean) => void,
+  user: string | null,
 ): Promise<void> {
 
   // id to DLLM and vendor
@@ -81,5 +82,5 @@ export async function llmStreamingChatGenerate<TSourceSetup = unknown, TAccess =
     await new Promise(resolve => setTimeout(resolve, delay));
 
   // execute via the vendor
-  return await vendor.streamingChatGenerateOrThrow(access, llmId, llmOptions, messages, functions, forceFunctionName, abortSignal, onUpdate);
+  return await vendor.streamingChatGenerateOrThrow(access, llmId, llmOptions, messages, functions, forceFunctionName, abortSignal, onUpdate, user);
 }

@@ -20,7 +20,12 @@ import { useElevenLabsVoiceDropdown } from '~/modules/elevenlabs/useElevenLabsVo
 
 import { Link } from '~/common/components/Link';
 import { SpeechResult, useSpeechRecognition } from '~/common/components/useSpeechRecognition';
-import { conversationTitle, createDMessage, DMessage, useChatStore } from '~/common/state/store-chats';
+import {
+  conversationTitle,
+  createDMessage,
+  DMessage,
+  useChatStore,
+} from '~/common/state/store-chats';
 import { launchAppChat, navigateToIndex } from '~/common/app.routes';
 import { playSoundUrl, usePlaySoundUrl } from '~/common/util/audioUtils';
 import { usePluggableOptimaLayout } from '~/common/layout/optima/useOptimaLayout';
@@ -74,7 +79,8 @@ function CallMenuItems(props: {
       <Switch checked={grayUI} sx={{ ml: 'auto' }} />
     </MenuItem>
 
-    <MenuItem component={Link} href='https://github.com/enricoros/big-agi/issues/175' target='_blank'>
+    <MenuItem component={Link} href="https://github.com/enricoros/big-agi/issues/175"
+              target="_blank">
       Voice Calls Feedback
     </MenuItem>
 
@@ -123,7 +129,15 @@ export function Telephone(props: {
         setCallMessages(messages => [...messages, createDMessage('user', transcribed)]);
     }
   }, []);
-  const { isSpeechEnabled, isRecording, isRecordingAudio, isRecordingSpeech, startRecording, stopRecording, toggleRecording } = useSpeechRecognition(onSpeechResultCallback, 1000);
+  const {
+    isSpeechEnabled,
+    isRecording,
+    isRecordingAudio,
+    isRecordingSpeech,
+    startRecording,
+    stopRecording,
+    toggleRecording,
+  } = useSpeechRecognition(onSpeechResultCallback, 1000);
 
   // derived state
   const isRinging = stage === 'ring';
@@ -205,7 +219,10 @@ export function Telephone(props: {
     if (!chatLLMId) return;
 
     // temp fix: when the chat has no messages, only assume a single system message
-    const chatMessages: { role: VChatMessageIn['role'], text: string }[] = (reMessages && reMessages.length > 0)
+    const chatMessages: {
+      role: VChatMessageIn['role'],
+      text: string
+    }[] = (reMessages && reMessages.length > 0)
       ? reMessages
       : personaSystemMessage
         ? [{ role: 'system', text: personaSystemMessage }]
@@ -214,9 +231,15 @@ export function Telephone(props: {
     // 'prompt' for a "telephone call"
     // FIXME: can easily run ouf of tokens - if this gets traction, we'll fix it
     const callPrompt: VChatMessageIn[] = [
-      { role: 'system', content: 'You are having a phone call. Your response style is brief and to the point, and according to your personality, defined below.' },
+      {
+        role: 'system',
+        content: 'You are having a phone call. Your response style is brief and to the point, and according to your personality, defined below.',
+      },
       ...chatMessages.map(message => ({ role: message.role, content: message.text })),
-      { role: 'system', content: 'You are now on the phone call related to the chat above. Respect your personality and answer with short, friendly and accurate thoughtful lines.' },
+      {
+        role: 'system',
+        content: 'You are now on the phone call related to the chat above. Respect your personality and answer with short, friendly and accurate thoughtful lines.',
+      },
       ...callMessages.map(message => ({ role: message.role, content: message.text })),
     ];
 
@@ -226,12 +249,14 @@ export function Telephone(props: {
     let error: any | null = null;
     setPersonaTextInterim('💭...');
     llmStreamingChatGenerate(chatLLMId, callPrompt, null, null, responseAbortController.current.signal, ({ textSoFar }) => {
-      const text = textSoFar?.trim();
-      if (text) {
-        finalText = text;
-        setPersonaTextInterim(text);
-      }
-    }).catch((err: DOMException) => {
+        const text = textSoFar?.trim();
+        if (text) {
+          finalText = text;
+          setPersonaTextInterim(text);
+        }
+      },
+      null)
+    .catch((err: DOMException) => {
       if (err?.name !== 'AbortError')
         error = err;
     }).finally(() => {
@@ -290,7 +315,7 @@ export function Telephone(props: {
   return <>
 
     <Typography
-      level='h1'
+      level="h1"
       sx={{
         fontSize: { xs: '2.5rem', md: '3rem' },
         textAlign: 'center',
@@ -316,7 +341,7 @@ export function Telephone(props: {
 
     {/* Live Transcript, w/ streaming messages, audio indication, etc. */}
     {(isConnected || isEnded) && (
-      <Card variant='outlined' sx={{
+      <Card variant="outlined" sx={{
         flexGrow: 1,
         maxHeight: '28%',
         minHeight: '20%',
@@ -363,19 +388,20 @@ export function Telephone(props: {
             {!!personaTextInterim && (
               <CallMessage
                 text={personaTextInterim}
-                variant='outlined'
-                color='neutral'
-                role='assistant'
+                variant="outlined"
+                color="neutral"
+                role="assistant"
               />
             )}
 
             {/* Listening... */}
             {isRecording && (
               <CallMessage
-                text={<>{speechInterim?.transcript.trim() || null}{speechInterim?.interimTranscript.trim() ? <i> {speechInterim.interimTranscript}</i> : null}</>}
+                text={<>{speechInterim?.transcript.trim() || null}{speechInterim?.interimTranscript.trim() ?
+                  <i> {speechInterim.interimTranscript}</i> : null}</>}
                 variant={(isRecordingSpeech || !!speechInterim?.transcript) ? 'soft' : 'outlined'}
-                color='primary'
-                role='user'
+                color="primary"
+                role="user"
               />
             )}
 
@@ -392,17 +418,21 @@ export function Telephone(props: {
     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', gap: 4 }}>
 
       {/* [ringing] Decline / Accept */}
-      {isRinging && <CallButton Icon={CallEndIcon} text='Decline' color='danger' variant='solid' onClick={() => setStage('declined')} />}
-      {isRinging && isEnabled && <CallButton Icon={CallIcon} text='Accept' color='success' variant='solid' onClick={() => setStage('connected')} />}
+      {isRinging && <CallButton Icon={CallEndIcon} text="Decline" color="danger" variant="solid"
+                                onClick={() => setStage('declined')} />}
+      {isRinging && isEnabled &&
+        <CallButton Icon={CallIcon} text="Accept" color="success" variant="solid"
+                    onClick={() => setStage('connected')} />}
 
       {/* [Calling] Hang / PTT (mute not enabled yet) */}
-      {isConnected && <CallButton Icon={CallEndIcon} text='Hang up' color='danger' variant='soft' onClick={handleCallStop} />}
+      {isConnected && <CallButton Icon={CallEndIcon} text="Hang up" color="danger" variant="soft"
+                                  onClick={handleCallStop} />}
       {isConnected && (pushToTalk ? (
           <CallButton
             Icon={MicIcon} onClick={toggleRecording}
             text={isRecordingSpeech ? 'Listening...' : isRecording ? 'Listening' : 'Push To Talk'}
             variant={isRecordingSpeech ? 'solid' : isRecording ? 'soft' : 'outlined'}
-            color='primary'
+            color="primary"
             sx={!isRecording ? { backgroundColor: 'background.surface' } : undefined}
           />
         ) : null
@@ -412,14 +442,18 @@ export function Telephone(props: {
       )}
 
       {/* [ended] Back / Call Again */}
-      {(isEnded || isDeclined) && <CallButton Icon={ArrowBackIcon} text='Back' variant='soft' onClick={() => props.callIntent.backTo === 'app-chat' ? navigateToIndex() : props.backToContacts()} />}
-      {(isEnded || isDeclined) && <CallButton Icon={CallIcon} text='Call Again' color='success' variant='soft' onClick={() => setStage('connected')} />}
+      {(isEnded || isDeclined) && <CallButton Icon={ArrowBackIcon} text="Back" variant="soft"
+                                              onClick={() => props.callIntent.backTo === 'app-chat' ? navigateToIndex() : props.backToContacts()} />}
+      {(isEnded || isDeclined) &&
+        <CallButton Icon={CallIcon} text="Call Again" color="success" variant="soft"
+                    onClick={() => setStage('connected')} />}
 
     </Box>
 
     {/* DEBUG state */}
     {avatarClickCount > 10 && (avatarClickCount % 2 === 0) && (
-      <Card variant='outlined' sx={{ maxHeight: '25dvh', overflow: 'auto', whiteSpace: 'pre', py: 0, width: '100%' }}>
+      <Card variant="outlined"
+            sx={{ maxHeight: '25dvh', overflow: 'auto', whiteSpace: 'pre', py: 0, width: '100%' }}>
         Special commands: Stop, Retry, Try Again, Restart, Goodbye.
         {JSON.stringify({ isSpeechEnabled, isRecordingAudio, speechInterim }, null, 2)}
       </Card>

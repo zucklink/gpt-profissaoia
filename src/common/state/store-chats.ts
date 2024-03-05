@@ -12,6 +12,7 @@ import { defaultSystemPurposeId, SystemPurposeId } from '../../data';
 
 export type DConversationId = string;
 
+
 /**
  * Conversation, a list of messages between humans and bots
  * Future:
@@ -90,6 +91,8 @@ export function createDMessage(role: DMessage['role'], text: string): DMessage {
 
 interface ChatState {
   conversations: DConversation[];
+  user?: string | null;
+  userName?: string | null;
 }
 
 export interface ChatActions {
@@ -112,6 +115,12 @@ export interface ChatActions {
 
   // utility function
   _editConversation: (conversationId: string, update: Partial<DConversation> | ((conversation: DConversation) => Partial<DConversation>)) => void;
+
+  // User
+  setUser: (user: string) => void;
+  getUser: () => string | null;
+  setUserName: (user: string) => void;
+  getUserName: () => string | null;
 }
 
 type ConversationsStore = ChatState & ChatActions;
@@ -122,6 +131,22 @@ export const useChatStore = create<ConversationsStore>()(devtools(
 
       // default state
       conversations: defaultConversations,
+
+      setUserName: (userName: string) => {
+        _set({ userName });
+      },
+
+      getUserName: (): string | null => {
+        return _get().userName ?? null;
+      },
+
+      setUser: (user: string) => {
+        _set({ user });
+      },
+
+      getUser: (): string | null => {
+        return _get().user ?? null;
+      },
 
       prependNewConversation: (personaId: SystemPurposeId | undefined): DConversationId => {
         const newConversation = createDConversation(personaId);
@@ -182,12 +207,12 @@ export const useChatStore = create<ConversationsStore>()(devtools(
           ...deepCopy,
           id: uuidv4(), // roll conversation ID
           messages: deepCopy.messages
-            .slice(0, messageIndex)
-            .map((message: DMessage): DMessage => ({
-              ...message,
-              id: uuidv4(), // roll message ID
-              typing: false,
-            })),
+          .slice(0, messageIndex)
+          .map((message: DMessage): DMessage => ({
+            ...message,
+            id: uuidv4(), // roll message ID
+            typing: false,
+          })),
           updated: Date.now(),
           // Set the new title for the branched conversation
           autoTitle: newTitle,
@@ -484,5 +509,9 @@ export const useConversation = (conversationId: DConversationId | null) => useCh
     branchConversation: state.branchConversation,
     deleteConversations: state.deleteConversations,
     setMessages: state.setMessages,
+    setUser: state.setUser,
+    getUser: state.getUser,
+    setUserName: state.setUserName,
+    getUserName: state.getUserName,
   };
 }, shallow);

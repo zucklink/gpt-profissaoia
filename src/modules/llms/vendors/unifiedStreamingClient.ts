@@ -29,9 +29,11 @@ export async function unifiedStreamingClient<TSourceSetup = unknown, TLLMOptions
   llmId: DLLMId,
   llmOptions: TLLMOptions,
   messages: VChatMessageIn[],
-  functions: VChatFunctionIn[] | null, forceFunctionName: string | null,
+  functions: VChatFunctionIn[] | null,
+  forceFunctionName: string | null,
   abortSignal: AbortSignal,
   onUpdate: (update: StreamingClientUpdate, done: boolean) => void,
+  user: string | null
 ): Promise<void> {
 
   // model params (llm)
@@ -55,6 +57,7 @@ export async function unifiedStreamingClient<TSourceSetup = unknown, TLLMOptions
       ...(llmResponseTokens ? { maxTokens: llmResponseTokens } : {}),
     },
     history: messages,
+    user
   };
 
   // connect to the server-side streaming endpoint

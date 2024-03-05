@@ -67,8 +67,11 @@ const listModelsInputSchema = z.object({
 
 const chatGenerateWithFunctionsInputSchema = z.object({
   access: openAIAccessSchema,
-  model: openAIModelSchema, history: openAIHistorySchema,
-  functions: openAIFunctionsSchema.optional(), forceFunctionName: z.string().optional(),
+  model: openAIModelSchema,
+  history: openAIHistorySchema,
+  functions: openAIFunctionsSchema.optional(),
+  forceFunctionName: z.string().optional(),
+  user: z.string().nullable(),
 });
 
 const createImagesInputSchema = z.object({
@@ -81,6 +84,7 @@ const createImagesInputSchema = z.object({
     asUrl: z.boolean(), // if false, returns a base64 encoded data Url
     size: z.enum(['256x256', '512x512', '1024x1024', '1792x1024', '1024x1792']),
     style: z.enum(['natural', 'vivid']),
+    user: z.string().nullable(),
   }),
 });
 
@@ -248,12 +252,12 @@ export const llmOpenAIRouter = createTRPCRouter({
     .output(llmsChatGenerateWithFunctionsOutputSchema)
     .mutation(async ({ input }) => {
 
-      const { access, model, history, functions, forceFunctionName } = input;
+      const { access, model, history, functions, forceFunctionName, user } = input;
       const isFunctionsCall = !!functions && functions.length > 0;
 
       const wireCompletions = await openaiPOST<OpenAIWire.ChatCompletion.Response, OpenAIWire.ChatCompletion.Request>(
         access, model.id,
-        openAIChatCompletionPayload(model, history, isFunctionsCall ? functions : null, forceFunctionName ?? null, 1, false),
+        openAIChatCompletionPayload(model, history, isFunctionsCall ? functions : null, forceFunctionName ?? null, 1, false, user),
         '/v1/chat/completions',
       );
 
@@ -294,7 +298,7 @@ export const llmOpenAIRouter = createTRPCRouter({
           response_format: request.asUrl ? 'url' : 'b64_json',
           size: request.size,
           style: request.style,
-          user: 'big-agi',
+          user: request.user ?? undefined,
         },
         '/v1/images/generations',
       );
@@ -538,7 +542,13 @@ export function openAIAccess(access: OpenAIAccessSchema, modelRefId: string | nu
   }
 }
 
-export function openAIChatCompletionPayload(model: OpenAIModelSchema, history: OpenAIHistorySchema, functions: OpenAIFunctionsSchema | null, forceFunctionName: string | null, n: number, stream: boolean): OpenAIWire.ChatCompletion.Request {
+export function openAIChatCompletionPayload(model: OpenAIModelSchema,
+                                            history: OpenAIHistorySchema,
+                                            functions: OpenAIFunctionsSchema | null,
+                                            forceFunctionName: string | null,
+                                            n: number,
+                                            stream: boolean,
+                                            user: string | null): OpenAIWire.ChatCompletion.Request {
   return {
     model: model.id,
     messages: history,
@@ -547,6 +557,7 @@ export function openAIChatCompletionPayload(model: OpenAIModelSchema, history: O
     ...(model.maxTokens && { max_tokens: model.maxTokens }),
     ...(n > 1 && { n }),
     stream,
+    user: user
   };
 }
 

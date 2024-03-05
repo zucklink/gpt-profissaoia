@@ -14,6 +14,7 @@ import { themeBgAppChatComposer } from '~/common/app.theme';
 
 import { DesignerPrompt, PromptDesigner } from './components/PromptDesigner';
 import { ProviderConfigure } from './components/ProviderConfigure';
+import { useConversation } from '~/common/state/store-chats';
 
 
 const STILL_LAYOUTING = false;
@@ -22,10 +23,10 @@ const STILL_LAYOUTING = false;
 /**
  * @returns up-to `vectorSize` image URLs
  */
-async function queryActiveGenerateImageVector(singlePrompt: string, vectorSize: number = 1) {
+async function queryActiveGenerateImageVector(singlePrompt: string, vectorSize: number = 1, user: string | null) {
   const t2iProvider = getActiveTextToImageProviderOrThrow();
 
-  const mdStringsVector = await t2iGenerateImageOrThrow(t2iProvider, singlePrompt, vectorSize);
+  const mdStringsVector = await t2iGenerateImageOrThrow(t2iProvider, singlePrompt, vectorSize, user);
   if (!mdStringsVector?.length)
     throw new Error('No image generated');
 
@@ -37,18 +38,18 @@ async function queryActiveGenerateImageVector(singlePrompt: string, vectorSize: 
 }
 
 
-function TempPromptImageGen(props: { prompt: DesignerPrompt, sx?: SxProps }) {
+function TempPromptImageGen(props: { prompt: DesignerPrompt, sx?: SxProps, user: string | null }) {
 
   // NOTE: we shall consider a multidimensional shape-based design
 
   // derived state
-  const { prompt: dp } = props;
+  const { prompt: dp, user } = props;
 
   // external state
   const { data: imageBlocks, error, isLoading } = useQuery<ImageBlock[], Error>({
     enabled: !!dp.prompt,
     queryKey: ['draw-uuid', dp.uuid],
-    queryFn: () => queryActiveGenerateImageVector(dp.prompt, dp._repeatCount),
+    queryFn: () => queryActiveGenerateImageVector(dp.prompt, dp._repeatCount, user),
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -97,6 +98,11 @@ export function TextToImage(props: {
   // state
   const [prompts, setPrompts] = React.useState<DesignerPrompt[]>([]);
 
+  const {
+    getUser,
+  } = useConversation(null);
+
+  const user = getUser();
 
   const handleStopDrawing = React.useCallback(() => {
     setPrompts([]);
@@ -148,6 +154,7 @@ export function TextToImage(props: {
               sx={{
                 border: STILL_LAYOUTING ? '1px solid green' : undefined,
               }}
+              user={user}
             />
           );
         })}

@@ -1,6 +1,17 @@
 import * as React from 'react';
 
-import { Box, Button, ButtonGroup, CircularProgress, Divider, FormControl, FormLabel, Grid, IconButton, Input } from '@mui/joy';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  CircularProgress,
+  Divider,
+  FormControl,
+  FormLabel,
+  Grid,
+  IconButton,
+  Input,
+} from '@mui/joy';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -13,13 +24,19 @@ import { llmStreamingChatGenerate } from '~/modules/llms/llm.client';
 
 import { GoodModal } from '~/common/components/GoodModal';
 import { InlineError } from '~/common/components/InlineError';
-import { createDMessage, useChatStore } from '~/common/state/store-chats';
+import { createDMessage, useChatStore, useConversation } from '~/common/state/store-chats';
 import { useFormRadio } from '~/common/components/forms/useFormRadio';
 import { useFormRadioLlmType } from '~/common/components/forms/useFormRadioLlmType';
 import { useIsMobile } from '~/common/components/useMatchMedia';
 import { useUIPreferencesStore } from '~/common/state/store-ui';
 
-import { bigDiagramPrompt, DiagramLanguage, diagramLanguages, DiagramType, diagramTypes } from './diagrams.data';
+import {
+  bigDiagramPrompt,
+  DiagramLanguage,
+  diagramLanguages,
+  DiagramType,
+  diagramTypes,
+} from './diagrams.data';
 
 
 // Used by the callers to setup the diagam session
@@ -37,8 +54,8 @@ function hotFixDiagramCode(llmCode: string): string {
     llmCode = '```\n' + llmCode + '\n```';
   // fix generation mistakes
   return llmCode
-    .replaceAll('@endmindmap\n@enduml', '@endmindmap')
-    .replaceAll('```\n```', '```');
+  .replaceAll('@endmindmap\n@enduml', '@endmindmap')
+  .replaceAll('```\n```', '```');
 }
 
 
@@ -60,6 +77,12 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
 
   // derived state
   const { conversationId, text: subject } = props.config;
+
+  const {
+    getUser,
+  } = useConversation(null);
+
+  const user = getUser();
 
 
   /**
@@ -89,9 +112,15 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
     const diagramPrompt = bigDiagramPrompt(diagramType, diagramLanguage, systemMessage.text, subject, customInstruction);
 
     try {
-      await llmStreamingChatGenerate(diagramLlm.id, diagramPrompt, null, null, stepAbortController.signal,
+      await llmStreamingChatGenerate(
+        diagramLlm.id,
+        diagramPrompt,
+        null,
+        null,
+        stepAbortController.signal,
         ({ textSoFar }) => textSoFar && setDiagramCode(diagramCode = textSoFar),
-      );
+        user);
+
     } catch (error: any) {
       setDiagramCode(null);
       setErrorMessage(error?.name !== 'AbortError' ? error?.message : 'Interrupted.');
@@ -100,7 +129,7 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
       setAbortController(null);
     }
 
-  }, [abortController, conversationId, diagramLanguage, diagramLlm, diagramType, subject, customInstruction]);
+  }, [abortController, conversationId, diagramLanguage, diagramLlm, diagramType, subject, customInstruction, user]);
 
 
   // [Effect] Auto-abort on unmount
@@ -128,11 +157,12 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
 
 
   return <GoodModal
-    title='Generar Diagrama' noTitleBar
+    title="Generar Diagrama" noTitleBar
     open onClose={props.onClose}
     sx={{ maxWidth: { xs: '100vw', md: '95vw' } }}
     startButton={
-      <Button variant='soft' color='success' disabled={!diagramCode || !!abortController} endDecorator={<TelegramIcon />} onClick={handleInsertAndClose}>
+      <Button variant="soft" color="success" disabled={!diagramCode || !!abortController}
+              endDecorator={<TelegramIcon />} onClick={handleInsertAndClose}>
         Adicionar ao chat
       </Button>
     }
@@ -154,18 +184,21 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
         <Grid xs={12} md={6}>
           <FormControl>
             <FormLabel>Instrução personalizada</FormLabel>
-            <Input title='Instrução personalizada' placeholder='ex. visualizar como estado' value={customInstruction} onChange={(e) => setCustomInstruction(e.target.value)} />          </FormControl>
+            <Input title="Instrução personalizada" placeholder="ex. visualizar como estado"
+                   value={customInstruction}
+                   onChange={(e) => setCustomInstruction(e.target.value)} /> </FormControl>
         </Grid>
       </Grid>
     )}
 
-    <ButtonGroup color='primary' sx={{ flexGrow: 1 }}>
+    <ButtonGroup color="primary" sx={{ flexGrow: 1 }}>
       <Button
         fullWidth
-        variant={abortController ? 'soft' : 'solid'} color='primary'
+        variant={abortController ? 'soft' : 'solid'} color="primary"
         disabled={!diagramLlm}
         onClick={abortController ? () => abortController.abort() : handleGenerateNew}
-        endDecorator={abortController ? <StopOutlinedIcon /> : diagramCode ? <ReplayIcon /> : <AccountTreeIcon />}
+        endDecorator={abortController ? <StopOutlinedIcon /> : diagramCode ? <ReplayIcon /> :
+          <AccountTreeIcon />}
         sx={{ minWidth: 200 }}
       >
         {abortController ? 'Parar' : diagramCode ? 'Gerar novamente' : 'Gerar'}
@@ -178,7 +211,7 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
     {errorMessage && <InlineError error={errorMessage} />}
 
     {!showOptions && !!abortController && <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-      <CircularProgress size='lg' />
+      <CircularProgress size="lg" />
     </Box>}
 
     {!!diagramCode && (!abortController || showOptions) && (
@@ -191,7 +224,7 @@ export function DiagramsModal(props: { config: DiagramConfig, onClose: () => voi
       }}>
         <BlocksRenderer
           text={diagramCode}
-          fromRole='assistant'
+          fromRole="assistant"
           fitScreen={isMobile}
           contentScaling={contentScaling}
           renderTextAsMarkdown={false}

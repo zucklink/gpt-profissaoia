@@ -20,7 +20,7 @@ export interface LLMChainStep {
 /**
  * React hook to manage a chain of LLM transformations.
  */
-export function useLLMChain(steps: LLMChainStep[], llmId: DLLMId | undefined, chainInput: string | undefined, onSuccess?: (output: string, input: string) => void) {
+export function useLLMChain(steps: LLMChainStep[], llmId: DLLMId | undefined, chainInput: string | undefined, onSuccess?: (output: string, input: string) => void, user?: string | null) {
 
   // state
   const [chain, setChain] = React.useState<ChainState | null>(null);
@@ -43,7 +43,11 @@ export function useLLMChain(steps: LLMChainStep[], llmId: DLLMId | undefined, ch
 
   // starts a chain with the given inputs
   const startChain = React.useCallback((inputText: string | undefined, llmId: DLLMId | undefined, steps: LLMChainStep[]) => {
-    DEBUG_CHAIN && console.log('chain: restart', { textLen: inputText?.length, llmId, stepsCount: steps.length });
+    DEBUG_CHAIN && console.log('chain: restart', {
+      textLen: inputText?.length,
+      llmId,
+      stepsCount: steps.length,
+    });
 
     // abort any former running chain
     abortChain('restart');
@@ -99,7 +103,10 @@ export function useLLMChain(steps: LLMChainStep[], llmId: DLLMId | undefined, ch
     if (instruction.addUserInput)
       llmChatInput.push({ role: 'user', content: implodeText(chain.input, chain.safeInputLength) });
     if (instruction.addPrevAssistant && stepIdx > 0)
-      llmChatInput.push({ role: 'assistant', content: implodeText(chain.steps[stepIdx - 1].output!, chain.safeInputLength) });
+      llmChatInput.push({
+        role: 'assistant',
+        content: implodeText(chain.steps[stepIdx - 1].output!, chain.safeInputLength),
+      });
     if (instruction.addUser)
       llmChatInput.push({ role: 'user', content: instruction.addUser });
 
@@ -114,26 +121,32 @@ export function useLLMChain(steps: LLMChainStep[], llmId: DLLMId | undefined, ch
     setChainStepInterimText(null);
 
     // LLM call (streaming, cancelable)
-    llmStreamingChatGenerate(llmId, llmChatInput, null, null, stepAbortController.signal,
+    llmStreamingChatGenerate(
+      llmId,
+      llmChatInput,
+      null,
+      null,
+      stepAbortController.signal,
       ({ textSoFar }) => {
         textSoFar && setChainStepInterimText(interimText = textSoFar);
-      })
-      .then(() => {
-        if (stepAbortController.signal.aborted)
-          return;
-        const chainState = updateChainState(chain, llmChatInput, stepIdx, interimText);
-        if (chainState.output && onSuccess)
-          onSuccess(chainState.output, chainState.input);
-        setChain(chainState);
-      })
-      .catch((err) => {
-        if (!stepAbortController.signal.aborted)
-          setError(`Transformation error: ${err?.message || err?.toString() || err || 'unknown'}`);
-      })
-      .finally(() => {
-        stepDone = true;
-        setChainStepInterimText(null);
-      });
+      },
+      user ?? null)
+    .then(() => {
+      if (stepAbortController.signal.aborted)
+        return;
+      const chainState = updateChainState(chain, llmChatInput, stepIdx, interimText);
+      if (chainState.output && onSuccess)
+        onSuccess(chainState.output, chainState.input);
+      setChain(chainState);
+    })
+    .catch((err) => {
+      if (!stepAbortController.signal.aborted)
+        setError(`Transformation error: ${err?.message || err?.toString() || err || 'unknown'}`);
+    })
+    .finally(() => {
+      stepDone = true;
+      setChainStepInterimText(null);
+    });
 
     // abort if unmounted before the LLM call ends, or if the full chain has been aborted
     return () => {
@@ -141,7 +154,7 @@ export function useLLMChain(steps: LLMChainStep[], llmId: DLLMId | undefined, ch
         stepAbortController.abort('step aborted');
       _chainAbortController.signal.removeEventListener('abort', globalToStepListener);
     };
-  }, [chain, llmId, onSuccess]);
+  }, [chain, llmId, onSuccess, user]);
 
 
   return {
@@ -151,7 +164,10 @@ export function useLLMChain(steps: LLMChainStep[], llmId: DLLMId | undefined, ch
     chainProgress: chain?.progress ?? 0,
     chainStepName: chain?.steps?.find((step) => !step.isComplete)?.ref.name ?? null,
     chainStepInterimChars: chainStepInterimText?.length ?? null,
-    chainIntermediates: chain?.steps?.map((step) => ({ name: step.ref.name, output: step.output ?? null })).filter(i => !!i.output) ?? [],
+    chainIntermediates: chain?.steps?.map((step) => ({
+      name: step.ref.name,
+      output: step.output ?? null,
+    })).filter(i => !!i.output) ?? [],
     chainError: error,
     userCancelChain,
     restartChain,

@@ -10,7 +10,7 @@ import { TextToImageProvider } from '~/common/components/useCapabilities';
 /**
  * Text to image, appended as an 'assistant' message
  */
-export async function runImageGenerationUpdatingState(conversationId: string, imageText: string) {
+export async function runImageGenerationUpdatingState(conversationId: string, imageText: string, user: string | null) {
   const handler = ConversationManager.getHandler(conversationId);
 
   // Acquire the active TextToImageProvider
@@ -36,7 +36,7 @@ export async function runImageGenerationUpdatingState(conversationId: string, im
   handler.messageEdit(assistantMessageId, { originLLM: t2iProvider.painter }, false);
 
   try {
-    const imageUrls = await t2iGenerateImageOrThrow(t2iProvider, imageText, repeat);
+    const imageUrls = await t2iGenerateImageOrThrow(t2iProvider, imageText, repeat, user);
     handler.messageEdit(assistantMessageId, { text: imageUrls.join('\n'), typing: false }, true);
   } catch (error: any) {
     const errorMessage = error?.message || error?.toString() || 'Erro desconhecido';

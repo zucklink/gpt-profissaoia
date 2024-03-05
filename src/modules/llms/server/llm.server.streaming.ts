@@ -45,6 +45,7 @@ const chatStreamingInputSchema = z.object({
   access: z.union([anthropicAccessSchema, geminiAccessSchema, ollamaAccessSchema, openAIAccessSchema]),
   model: openAIModelSchema,
   history: openAIHistorySchema,
+  user: z.string().nullable(),
 });
 export type ChatStreamingInputSchema = z.infer<typeof chatStreamingInputSchema>;
 
@@ -58,7 +59,8 @@ export async function llmStreamingRelayHandler(req: NextRequest): Promise<Respon
 
   // inputs - reuse the tRPC schema
   const body = await req.json();
-  const { access, model, history } = chatStreamingInputSchema.parse(body);
+
+  const { access, model, history , user} = chatStreamingInputSchema.parse(body);
 
   // access/dialect dependent setup:
   //  - requestAccess: the headers and URL to use for the upstream API call
@@ -102,7 +104,7 @@ export async function llmStreamingRelayHandler(req: NextRequest): Promise<Respon
       case 'perplexity':
       case 'togetherai':
         requestAccess = openAIAccess(access, model.id, '/v1/chat/completions');
-        body = openAIChatCompletionPayload(model, history, null, null, 1, true);
+        body = openAIChatCompletionPayload(model, history, null, null, 1, true, user);
         vendorStreamParser = createStreamParserOpenAI();
         break;
     }

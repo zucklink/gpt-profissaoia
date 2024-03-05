@@ -15,7 +15,13 @@ import { ChatAutoSpeakType, getChatAutoAI } from '../store-app-chat';
 /**
  * The main "chat" function. TODO: this is here so we can soon move it to the data model.
  */
-export async function runAssistantUpdatingState(conversationId: string, history: DMessage[], assistantLlmId: DLLMId, systemPurpose: SystemPurposeId, parallelViewCount: number) {
+export async function runAssistantUpdatingState(conversationId: string,
+                                                history: DMessage[],
+                                                assistantLlmId: DLLMId,
+                                                systemPurpose: SystemPurposeId,
+                                                parallelViewCount: number,
+                                                user: string | null) {
+
   const cHandler = ConversationManager.getHandler(conversationId);
 
   // ai follow-up operations (fire/forget)
@@ -39,6 +45,7 @@ export async function runAssistantUpdatingState(conversationId: string, history:
     autoSpeak,
     (update) => cHandler.messageEdit(assistantMessageId, update, false),
     abortController.signal,
+    user
   );
 
   // clear to send, again
@@ -61,6 +68,7 @@ async function streamAssistantMessage(
   autoSpeak: ChatAutoSpeakType,
   editMessage: (update: Partial<DMessage>) => void,
   abortSignal: AbortSignal,
+  user: string | null,
 ) {
 
   // speak once
@@ -110,7 +118,8 @@ async function streamAssistantMessage(
           void speakText(firstParagraph);
         }
       }
-    });
+    },
+      user);
   } catch (error: any) {
     if (error?.name !== 'AbortError') {
       console.error('Fetch request error:', error);

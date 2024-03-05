@@ -20,6 +20,7 @@ import {
 } from '~/modules/llms/vendors/openai/openai.vendor';
 import { useLlmUpdateModels } from '~/modules/llms/vendors/useLlmUpdateModels';
 import { useSourceSetup } from '~/modules/llms/vendors/useSourceSetup';
+import { useConversation } from '~/common/state/store-chats';
 
 
 function VendorSourceSetup(props: { source: DModelSource }) {
@@ -42,10 +43,19 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
     openLlmOptions, openModelsSetup,
     showLlmOptions, showModelsSetup,
   } = useOptimaLayout();
+
   const { modelSources, llmCount } = useModelsStore(state => ({
     modelSources: state.sources,
     llmCount: state.llms.length,
   }), shallow);
+
+  const {
+    getUserName,
+    getUser,
+  } = useConversation(null);
+
+  const userName = getUserName();
+  const userEmail = getUser();
 
   // auto-select the first source - note: we could use a useEffect() here, but this is more efficient
   // also note that state-persistence is unneeded
@@ -74,7 +84,7 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
   // Execute the provided code when the modal is shown
   const { source, sourceHasLLMs, access, updateSetup } =
     // useSourceSetup(activeSource?.id, ModelVendorOpenAI);
-    useSourceSetup("openai", ModelVendorOpenAI);
+    useSourceSetup('openai', ModelVendorOpenAI);
 
   // derived state
   const { oaiKey, oaiOrg, oaiHost, heliKey, moderationCheck } = access;
@@ -102,7 +112,7 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
         refetch();
       }
     }
-  }, [showModelsSetup, activeSource, sourceHasLLMs, shallFetchSucceed, refetch]);
+  }, [showModelsSetup, activeSource, sourceHasLLMs, shallFetchSucceed, refetch, access]);
 
 
   return <>
@@ -129,13 +139,28 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
         alignItems="center"
         justifyContent="center"
       >
-        <Image src="/images/llms/openai-2.svg" height={200} width={200} alt={"Powered by OpenAI"}/>
+        <Image src="/images/llms/openai-2.svg" height={200} width={200} alt={'Powered by OpenAI'} />
+
         <Typography level="h2" sx={{ textAlign: 'center' }}>
           GPT Profissão IA
         </Typography>
+
         <Typography level="h3" sx={{ textAlign: 'center' }}>
           Powered by OpenAI
         </Typography>
+
+        <Divider sx={{  mt: 2 }}/>
+
+        {userName &&
+          <Typography level="body-sm" sx={{ textAlign: 'center', mt: 2 }}>
+            Cópia licenciada e de uso exclusivo de:
+          </Typography>}
+
+        {userName &&
+          <Typography level="body-sm" sx={{ textAlign: 'center' }}>
+          {userName} - {userEmail}
+        </Typography>}
+
       </Box>
 
       {/*<ModelsSourceSelector selectedSourceId={selectedSourceId} setSelectedSourceId={setSelectedSourceId} />*/}

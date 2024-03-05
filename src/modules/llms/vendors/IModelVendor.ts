@@ -51,9 +51,11 @@ export interface IModelVendor<TSourceSetup = unknown, TAccess = unknown, TLLMOpt
     llmId: DLLMId,
     llmOptions: TLLMOptions,
     messages: VChatMessageIn[],
-    functions: VChatFunctionIn[] | null, forceFunctionName: string | null,
+    functions: VChatFunctionIn[] | null,
+    forceFunctionName: string | null,
     abortSignal: AbortSignal,
     onUpdate: (update: StreamingClientUpdate, done: boolean) => void,
+    user: string | null,
   ) => Promise<void>;
 
 }

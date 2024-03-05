@@ -30,6 +30,22 @@ export type SystemPurposeData = {
 
 // @ts-ignore
 export const SystemPurposes: { [key in SystemPurposeId]: SystemPurposeData } = {
+  Generic: {
+    title: 'Padrão',
+    description: 'Ajuda você a pensar',
+    systemMessage: `Você é o ChatGPT, um grande modelo de linguagem treinado pela OpenAI, baseado na arquitetura GPT-4.
+    Data de conhecimento: {{Cutoff}}
+    Data atual: {{LocaleNow}}
+    
+    {{RenderMermaid}}
+    {{RenderPlantUML}}
+    {{RenderSVG}}
+    {{PreferTables}}`,
+    symbol: '🧠',
+    examples: ['me ajude a planejar uma viagem para o Japão', 'qual é o sentido da vida?', 'como consigo um emprego na OpenAI?', 'quais são algumas ideias de refeições saudáveis?'],
+    call: { starters: ['Ei, como posso ajudar?', 'Assistente de IA pronto. Do que você precisa?', 'Pronto para ajudar.', 'Olá.'] },
+    voices: { elevenLabs: { voiceId: 'z9fAnlkpzviPz146aGWa' } },
+  },
   PromptGenesis: {
     title: 'Rosana Gênesis',
     description: 'Auxilia na criação de prompts de comportamento para a Rosana.io',
@@ -168,22 +184,6 @@ Data atual: {{LocaleNow}}
     call: { starters: ['Dev aqui. Tem código?', 'Desenvolvedor de plantão. Qual é o problema?', 'Pronto para codificar.', 'Olá.'] },
     voices: { elevenLabs: { voiceId: 'yoZ06aMxZJJ28mfd3POQ' } },
     highlighted: true,
-  },
-  Generic: {
-    title: 'Padrão',
-    description: 'Ajuda você a pensar',
-    systemMessage: `Você é o ChatGPT, um grande modelo de linguagem treinado pela OpenAI, baseado na arquitetura GPT-4.
-    Data de conhecimento: {{Cutoff}}
-    Data atual: {{LocaleNow}}
-    
-    {{RenderMermaid}}
-    {{RenderPlantUML}}
-    {{RenderSVG}}
-    {{PreferTables}}`,
-    symbol: '🧠',
-    examples: ['me ajude a planejar uma viagem para o Japão', 'qual é o sentido da vida?', 'como consigo um emprego na OpenAI?', 'quais são algumas ideias de refeições saudáveis?'],
-    call: { starters: ['Ei, como posso ajudar?', 'Assistente de IA pronto. Do que você precisa?', 'Pronto para ajudar.', 'Olá.'] },
-    voices: { elevenLabs: { voiceId: 'z9fAnlkpzviPz146aGWa' } },
   },
   PromptMaster:  {
     title: 'Especialista em Prompts',

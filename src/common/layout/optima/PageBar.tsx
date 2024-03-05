@@ -8,6 +8,7 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Person from '@mui/icons-material/Person';
 
 import { checkVisibleNav, NavItemApp } from '~/common/app.nav';
 import { AgiSquircleIcon } from '~/common/components/icons/AgiSquircleIcon';
@@ -20,6 +21,7 @@ import { InvertedBar, InvertedBarCornerItem } from './components/InvertedBar';
 import { MobileNavListItem } from './MobileNavListItem';
 import { useOptimaDrawers } from './useOptimaDrawers';
 import { useOptimaLayout } from './useOptimaLayout';
+import { useConversation } from '~/common/state/store-chats';
 
 
 const PageBarItemsFallback = (props: { currentApp?: NavItemApp }) =>
@@ -44,6 +46,12 @@ function CommonPageMenuItems(props: { onClose: () => void }) {
   const { openPreferencesTab } = useOptimaLayout();
   const { mode: colorMode, setMode: setColorMode } = useColorScheme();
 
+  const {
+    getUserName,
+  } = useConversation(null);
+
+  const userName = getUserName();
+
   const handleShowSettings = (event: React.MouseEvent) => {
     event.stopPropagation();
     openPreferencesTab();
@@ -56,6 +64,11 @@ function CommonPageMenuItems(props: { onClose: () => void }) {
   };
 
   return <>
+
+    <MenuItem>
+      <ListItemDecorator><Person /></ListItemDecorator>
+      <Typography>{userName}</Typography>
+    </MenuItem>
 
     {/*<MenuItem onClick={handleToggleDarkMode}>*/}
     {/*  <ListItemDecorator><DarkModeIcon /></ListItemDecorator>*/}
@@ -78,6 +91,9 @@ function CommonPageMenuItems(props: { onClose: () => void }) {
     {/*    {colorMode !== 'dark' ? <DarkModeIcon /> : <LightModeIcon />}*/}
     {/*  </IconButton>*/}
     {/*</MenuItem>*/}
+
+
+
     <MenuItem>
       <ListItemDecorator><SettingsIcon /></ListItemDecorator>
       <Typography>Tema {colorMode}</Typography>

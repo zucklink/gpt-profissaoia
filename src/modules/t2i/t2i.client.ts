@@ -76,13 +76,13 @@ export function getActiveTextToImageProviderOrThrow() {
   return activeProvider;
 }
 
-export async function t2iGenerateImageOrThrow(provider: TextToImageProvider, prompt: string, count: number): Promise<string[]> {
+export async function t2iGenerateImageOrThrow(provider: TextToImageProvider, prompt: string, count: number, user: string | null): Promise<string[]> {
   switch (provider.vendor) {
 
     case 'openai':
       if (!provider.id)
         throw new Error('No OpenAI model source configured for TextToImage');
-      return await openAIGenerateImagesOrThrow(provider.id, prompt, count);
+      return await openAIGenerateImagesOrThrow(provider.id, prompt, count, user);
 
     case 'prodia':
       const hasProdiaServer = backendCaps().hasImagingProdia;

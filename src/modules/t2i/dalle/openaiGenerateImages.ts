@@ -8,7 +8,7 @@ import { useDalleStore } from './store-module-dalle';
 /**
  * Client function to call the OpenAI image generation API.
  */
-export async function openAIGenerateImagesOrThrow(modelSourceId: DModelSourceId, prompt: string, _count: number): Promise<string[]> {
+export async function openAIGenerateImagesOrThrow(modelSourceId: DModelSourceId, prompt: string, _count: number, user: string | null): Promise<string[]> {
 
   // use the current settings
   const {
@@ -42,6 +42,7 @@ export async function openAIGenerateImagesOrThrow(modelSourceId: DModelSourceId,
         asUrl: true,
         size: dalleSize,
         style: dalleStyle,
+        user
       },
     }).then(images =>
       // convert to markdown image references

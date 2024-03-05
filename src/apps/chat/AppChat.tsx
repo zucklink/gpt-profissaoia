@@ -14,10 +14,21 @@ import { useCapabilityTextToImage } from '~/modules/t2i/t2i.client';
 import { Brand } from '~/common/app.config';
 import { ConfirmationModal } from '~/common/components/ConfirmationModal';
 import { ConversationManager } from '~/common/chats/ConversationHandler';
-import { GlobalShortcutItem, ShortcutKeyName, useGlobalShortcuts } from '~/common/components/useGlobalShortcut';
+import {
+  GlobalShortcutItem,
+  ShortcutKeyName,
+  useGlobalShortcuts,
+} from '~/common/components/useGlobalShortcut';
 import { PanelResizeInset } from '~/common/components/panes/GoodPanelResizeHandler';
 import { addSnackbar, removeSnackbar } from '~/common/components/useSnackbarsStore';
-import { createDMessage, DConversationId, DMessage, getConversation, getConversationSystemPurposeId, useConversation } from '~/common/state/store-chats';
+import {
+  createDMessage,
+  DConversationId,
+  DMessage,
+  getConversation,
+  getConversationSystemPurposeId,
+  useConversation,
+} from '~/common/state/store-chats';
 import { getUXLabsHighPerformance, useUXLabsStore } from '~/common/state/store-ux-labs';
 import { themeBgAppChatComposer } from '~/common/app.theme';
 import { useFolderStore } from '~/common/state/store-folders';
@@ -106,6 +117,7 @@ export function AppChat() {
     branchConversation,
     deleteConversations,
     setMessages,
+    getUser,
   } = useConversation(focusedConversationId);
 
   const { mayWork: capabilityHasT2I } = useCapabilityTextToImage();
@@ -156,14 +168,23 @@ export function AppChat() {
 
   // Execution
 
-  const _handleExecute = React.useCallback(async (chatModeId: ChatModeId, conversationId: DConversationId, history: DMessage[]): Promise<void> => {
+  const _handleExecute = React.useCallback(async (
+    chatModeId: ChatModeId,
+    conversationId: DConversationId,
+    history: DMessage[]): Promise<void> => {
+
     const chatLLMId = getChatLLMId();
     if (!chatModeId || !conversationId || !chatLLMId) return;
 
+    const user = getUser();
+
     // "/command ...": overrides the chat mode
     const lastMessage = history.length > 0 ? history[history.length - 1] : null;
+
     if (lastMessage?.role === 'user') {
+
       const chatCommand = extractChatCommand(lastMessage.text)[0];
+
       if (chatCommand && chatCommand.type === 'cmd') {
         switch (chatCommand.providerId) {
           case 'ass-beam':
@@ -175,7 +196,7 @@ export function AppChat() {
 
           case 'ass-t2i':
             setMessages(conversationId, history);
-            return await runImageGenerationUpdatingState(conversationId, chatCommand.params!);
+            return await runImageGenerationUpdatingState(conversationId, chatCommand.params!, user);
 
           case 'ass-react':
             setMessages(conversationId, history);
@@ -198,8 +219,8 @@ export function AppChat() {
 
           case 'cmd-help':
             const chatCommandsText = findAllChatCommands()
-              .map(cmd => ` - ${cmd.primary}` + (cmd.alternatives?.length ? ` (${cmd.alternatives.join(', ')})` : '') + `: ${cmd.description}`)
-              .join('\n');
+            .map(cmd => ` - ${cmd.primary}` + (cmd.alternatives?.length ? ` (${cmd.alternatives.join(', ')})` : '') + `: ${cmd.description}`)
+            .join('\n');
             const helpMessage = createDMessage('assistant', 'Available Chat Commands:\n' + chatCommandsText);
             helpMessage.originLLM = Brand.Title.Base;
             return setMessages(conversationId, [...history, helpMessage]);
@@ -215,11 +236,19 @@ export function AppChat() {
     if (!conversationSystemPurposeId)
       return setMessages(conversationId, [...history, createDMessage('assistant', 'No persona selected.')]);
 
+
     // synchronous long-duration tasks, which update the state as they go
     if (chatLLMId) {
       switch (chatModeId) {
         case 'generate-text':
-          return await runAssistantUpdatingState(conversationId, history, chatLLMId, conversationSystemPurposeId, getUXLabsHighPerformance() ? 0 : getInstantAppChatPanesCount());
+          return await runAssistantUpdatingState(
+            conversationId,
+            history,
+            chatLLMId,
+            conversationSystemPurposeId,
+            getUXLabsHighPerformance() ? 0 : getInstantAppChatPanesCount(),
+            user ?? null,
+          );
 
         case 'generate-text-beam':
           return ConversationManager.getHandler(conversationId).beamStore.create(history);
@@ -235,7 +264,7 @@ export function AppChat() {
             ...message,
             text: `/draw ${lastMessage.text}`,
           }));
-          return await runImageGenerationUpdatingState(conversationId, lastMessage.text);
+          return await runImageGenerationUpdatingState(conversationId, lastMessage.text, user);
 
         case 'generate-react':
           if (!lastMessage?.text)
@@ -248,9 +277,10 @@ export function AppChat() {
     // ISSUE: if we're here, it means we couldn't do the job, at least sync the history
     console.log('handleExecuteConversation: issue running', chatModeId, conversationId, lastMessage);
     setMessages(conversationId, history);
-  }, [setMessages]);
+  }, [setMessages, getUser]);
 
   const handleComposerAction = React.useCallback((chatModeId: ChatModeId, conversationId: DConversationId, multiPartMessage: ComposerOutputMultiPart): boolean => {
+
     // validate inputs
     if (multiPartMessage.length !== 1 || multiPartMessage[0].type !== 'text-block') {
       addSnackbar({
@@ -267,8 +297,9 @@ export function AppChat() {
 
     // multicast: send the message to all the panes
     const uniqueIds = new Set([conversationId]);
-    if (willMulticast)
+    if (willMulticast) {
       chatPanes.forEach(pane => pane.conversationId && uniqueIds.add(pane.conversationId));
+    }
 
     // we loop to handle both the normal and multicast modes
     let enqueued = false;
@@ -289,11 +320,14 @@ export function AppChat() {
 
   const handleMessageRegenerateLast = React.useCallback(async () => {
     const focusedConversation = getConversation(focusedConversationId);
+
     if (focusedConversation?.messages?.length) {
       const lastMessage = focusedConversation.messages[focusedConversation.messages.length - 1];
-      return await _handleExecute('generate-text', focusedConversation.id, lastMessage.role === 'assistant'
-        ? focusedConversation.messages.slice(0, -1)
-        : [...focusedConversation.messages],
+
+      return await _handleExecute(
+        'generate-text',
+        focusedConversation.id,
+        lastMessage.role === 'assistant' ? focusedConversation.messages.slice(0, -1) : [...focusedConversation.messages],
       );
     }
   }, [focusedConversationId, _handleExecute]);
@@ -305,10 +339,14 @@ export function AppChat() {
     if (!conversation)
       return;
     const imaginedPrompt = await imaginePromptFromText(messageText) || 'An error sign.';
-    return await _handleExecute('generate-image', conversationId, [
-      ...conversation.messages,
-      createDMessage('user', imaginedPrompt),
-    ]);
+
+    return await _handleExecute(
+      'generate-image',
+      conversationId,
+      [
+        ...conversation.messages,
+        createDMessage('user', imaginedPrompt),
+      ]);
   }, [_handleExecute]);
 
   const handleTextSpeak = React.useCallback(async (text: string): Promise<void> => {
@@ -407,6 +445,7 @@ export function AppChat() {
     [ShortcutKeyName.Left, true, false, true, () => handleNavigateHistory('back')],
     [ShortcutKeyName.Right, true, false, true, () => handleNavigateHistory('forward')],
   ], [focusedConversationId, handleConversationBranch, handleConversationClear, handleConversationNew, handleDeleteConversations, handleMessageRegenerateLast, handleNavigateHistory, handleOpenChatLlmOptions, isFocusedChatEmpty]);
+
   useGlobalShortcuts(shortcuts);
 
 
@@ -461,7 +500,7 @@ export function AppChat() {
 
     <PanelGroup
       direction={isMobile ? 'vertical' : 'horizontal'}
-      id='app-chat-panels'
+      id="app-chat-panels"
     >
 
       {chatPanes.map((pane, idx) => {
@@ -603,7 +642,8 @@ export function AppChat() {
     />
 
     {/* Diagrams */}
-    {!!diagramConfig && <DiagramsModal config={diagramConfig} onClose={() => setDiagramConfig(null)} />}
+    {!!diagramConfig &&
+      <DiagramsModal config={diagramConfig} onClose={() => setDiagramConfig(null)} />}
 
     {/* Flatten */}
     {!!flattenConversationId && (
@@ -626,16 +666,18 @@ export function AppChat() {
     {/* [confirmation] Reset Conversation */}
     {!!clearConversationId && (
       <ConfirmationModal
-        open onClose={() => setClearConversationId(null)} onPositive={handleConfirmedClearConversation}
-        confirmationText='Tem certeza de que deseja descartar todas as mensagens?'
-        positiveActionText='Limpar conversa'
+        open onClose={() => setClearConversationId(null)}
+        onPositive={handleConfirmedClearConversation}
+        confirmationText="Tem certeza de que deseja descartar todas as mensagens?"
+        positiveActionText="Limpar conversa"
       />
     )}
 
     {/* [confirmation] Delete All */}
-   {!!deleteConversationIds?.length && (
+    {!!deleteConversationIds?.length && (
       <ConfirmationModal
-        open onClose={() => setDeleteConversationIds(null)} onPositive={handleConfirmedDeleteConversations}
+        open onClose={() => setDeleteConversationIds(null)}
+        onPositive={handleConfirmedDeleteConversations}
         confirmationText={`Você tem certeza absoluta de que deseja excluir ${deleteConversationIds.length === 1 ? 'esta conversa' : 'essas conversas'}? Esta ação não pode ser desfeita.`}
         positiveActionText={deleteConversationIds.length === 1 ? 'Excluir conversa' : `Sim, excluir todas as ${deleteConversationIds.length} conversas`}
       />

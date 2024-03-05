@@ -13,7 +13,7 @@ export function useStreamChatText() {
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
 
-  const startStreaming = React.useCallback(async (llmId: DLLMId, prompt: VChatMessageIn[]) => {
+  const startStreaming = React.useCallback(async (llmId: DLLMId, prompt: VChatMessageIn[], user: string | null) => {
     setStreamError(null);
     setPartialText(null);
     setText(null);
@@ -24,12 +24,19 @@ export function useStreamChatText() {
 
     try {
       let lastText = '';
-      await llmStreamingChatGenerate(llmId, prompt, null, null, abortControllerRef.current.signal, ({ textSoFar }) => {
-        if (textSoFar) {
-          lastText = textSoFar;
-          setPartialText(lastText);
-        }
-      });
+      await llmStreamingChatGenerate(
+        llmId,
+        prompt,
+        null,
+        null,
+        abortControllerRef.current.signal,
+        ({ textSoFar }) => {
+          if (textSoFar) {
+            lastText = textSoFar;
+            setPartialText(lastText);
+          }
+        },
+        user ?? null);
       // Since streamChat has finished, we can assume the stream is complete
       setText(lastText);
     } catch (error: any) {
