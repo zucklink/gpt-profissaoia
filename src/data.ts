@@ -33,6 +33,7 @@ export const SystemPurposes: { [key in SystemPurposeId]: SystemPurposeData } = {
   Generic: {
     title: 'Padrão',
     description: 'Ajuda você a pensar',
+    highlighted: true,
     systemMessage: `Você é o ChatGPT, um grande modelo de linguagem treinado pela OpenAI, baseado na arquitetura GPT-4.
     Data de conhecimento: {{Cutoff}}
     Data atual: {{LocaleNow}}
@@ -183,7 +184,7 @@ Data atual: {{LocaleNow}}
     examples: ['quero criar um agente de vendas', 'quero criar um agente de suporte', 'quero criar um agente de atendimento', 'quero criar um agente de vendas e suporte', 'quero criar um agente de vendas e atendimento', 'quero criar um agente de suporte e atendimento', 'quero criar um agente de vendas, suporte e atendimento'],
     call: { starters: ['Dev aqui. Tem código?', 'Desenvolvedor de plantão. Qual é o problema?', 'Pronto para codificar.', 'Olá.'] },
     voices: { elevenLabs: { voiceId: 'yoZ06aMxZJJ28mfd3POQ' } },
-    highlighted: true,
+    highlighted: false,
   },
   PromptMaster:  {
     title: 'Especialista em Prompts',

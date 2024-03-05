@@ -458,6 +458,7 @@ export function openAIAccess(access: OpenAIAccessSchema, modelRefId: string | nu
           ...(oaiKey && { Authorization: `Bearer ${oaiKey}` }),
           ...(oaiOrg && { 'OpenAI-Organization': oaiOrg }),
           ...(heliKey && { 'Helicone-Auth': `Bearer ${heliKey}` }),
+          ...(heliKey && { 'Helicone-Cache-Enabled': 'true' }),
         },
         url: oaiHost + apiPath,
       };
