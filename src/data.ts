@@ -13,7 +13,7 @@ export type SystemPurposeId =
   | 'HRExpert'
   | 'PromptMaster';
 
-export const defaultSystemPurposeId: SystemPurposeId = 'PromptGenesis';
+export const defaultSystemPurposeId: SystemPurposeId = 'Generic';
 
 export type SystemPurposeData = {
   title: string;
