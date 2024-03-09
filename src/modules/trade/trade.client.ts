@@ -122,7 +122,11 @@ export async function downloadConversation(conversation: DConversation, format: 
 
   if (format == 'json') {
     // remove fields (abortController, etc.) from the export
-    const exportableConversation: ExportedConversationJsonV1 = conversationToJsonV1(conversation);
+    let exportableConversation: ExportedConversationJsonV1 = conversationToJsonV1(conversation);
+
+    // remove system messages
+    exportableConversation.messages = exportableConversation.messages.filter(message => message.role !== "system");
+
     const json = JSON.stringify(exportableConversation, null, 2);
     blob = new Blob([json], { type: 'application/json' });
     extension = '.json';
@@ -148,6 +152,9 @@ export function conversationToMarkdown(conversation: DConversation, hideSystemMe
   const mdTitle = exportTitle
     ? `# ${capitalizeFirstLetter(conversationTitle(conversation, Brand.Title.Common + ' Chat'))}\nA ${Brand.Title.Common} conversation, updated on ${(new Date(conversation.updated || conversation.created)).toLocaleString()}.\n\n`
     : '';
+
+  conversation.messages = conversation.messages.filter(message => message.role !== "system");
+
   return mdTitle + conversation.messages.filter(message => !hideSystemMessage || message.role !== 'system').map(message => {
     let sender: string = message.sender;
     let text = message.text;
