@@ -21,6 +21,13 @@ export function isPwa(): boolean {
   return isBrowser ? window.matchMedia('(display-mode: standalone)').matches : false;
 }
 
+export function isInIframe(): boolean {
+  if(!isBrowser){
+    return false;
+  }
+  return (parent !== window);
+}
+
 export function webSharePresent(): boolean {
   return isBrowser && !!navigator.share;
 }

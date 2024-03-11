@@ -1,14 +1,29 @@
 import { addSnackbar } from '../components/useSnackbarsStore';
-import { isBrowser, isFirefox } from './pwaUtils';
+import { isBrowser, isFirefox, isInIframe } from './pwaUtils';
 
 export function copyToClipboard(text: string, typeLabel: string) {
-  if (!isBrowser)
+  if (!isBrowser) {
     return;
+  }
+
+  if (isInIframe()) {
+    window.parent.postMessage({ type: "copyToClipboard", text: text }, "*");
+    addSnackbar({
+      key: 'copy-to-clipboard',
+      message: 'Conteúdo copiado para área de transferência',
+      type: 'success',
+      closeButton: false,
+      overrides: {
+        autoHideDuration: 1400,
+      },
+    });
+    return;
+  }
+
   window.navigator.clipboard.writeText(text)
     .then(() => {
       addSnackbar({
         key: 'copy-to-clipboard',
-        // message: `${typeLabel} copiado para área de transferência`,
         message: 'Conteúdo copiado para área de transferência',
         type: 'success',
         closeButton: false,
