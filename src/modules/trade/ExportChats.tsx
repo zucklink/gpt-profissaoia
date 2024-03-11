@@ -28,6 +28,7 @@ export function ExportChats(props: { config: ExportConfig, onClose: () => void }
   // state
   const [downloadedJSONState, setDownloadedJSONState] = React.useState<'ok' | 'fail' | null>(null);
   const [downloadedMarkdownState, setDownloadedMarkdownState] = React.useState<'ok' | 'fail' | null>(null);
+  const [downloadedPdfState, setDownloadedPdfState] = React.useState<'ok' | 'fail' | null>(null);
   const [downloadedAllState, setDownloadedAllState] = React.useState<'ok' | 'fail' | null>(null);
 
   // external state
@@ -57,6 +58,15 @@ export function ExportChats(props: { config: ExportConfig, onClose: () => void }
       .catch(() => setDownloadedMarkdownState('fail'));
   };
 
+  const handleDownloadConversationPdf = () => {
+    if (!props.config.conversationId) return;
+    const conversation = getConversation(props.config.conversationId);
+    if (!conversation) return;
+    downloadConversation(conversation, 'pdf')
+    .then(() => setDownloadedPdfState('ok'))
+    .catch(() => setDownloadedPdfState('fail'));
+  };
+
   const handleDownloadAllConversationsJSON = () => {
     downloadAllConversationsJson()
       .then(() => setDownloadedAllState('ok'))
@@ -76,7 +86,7 @@ export function ExportChats(props: { config: ExportConfig, onClose: () => void }
 
           {exportAll && (
             <Typography level='body-sm'>
-              Download or share <strong>this chat</strong>:
+              Download ou compartilhe <strong>este chat</strong>:
             </Typography>
           )}
 
@@ -97,7 +107,17 @@ export function ExportChats(props: { config: ExportConfig, onClose: () => void }
             sx={{ minWidth: 240, justifyContent: 'space-between' }}
             onClick={handleDownloadConversationMarkdown}
           >
-            Export · Markdown
+            Download · Markdown
+          </Button>
+
+          <Button
+            variant='soft' disabled={!hasConversation}
+            color={downloadedPdfState === 'ok' ? 'success' : downloadedPdfState === 'fail' ? 'warning' : 'primary'}
+            endDecorator={downloadedPdfState === 'ok' ? <DoneIcon /> : downloadedPdfState === 'fail' ? '✘' : <FileDownloadIcon />}
+            sx={{ minWidth: 240, justifyContent: 'space-between' }}
+            onClick={handleDownloadConversationPdf}
+          >
+            Download · PDF
           </Button>
 
           {enableSharing && (

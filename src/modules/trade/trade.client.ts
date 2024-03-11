@@ -12,6 +12,8 @@ import { prettyBaseModel } from '~/common/util/modelUtils';
 
 import { ImportedOutcome } from './ImportOutcomeModal';
 
+import { jsPDF, RGBAData } from 'jspdf';
+
 
 /// IMPORT ///
 
@@ -111,11 +113,22 @@ export async function downloadAllConversationsJson() {
   await fileSave(blob, { fileName: `conversations-${isoDate}.json`, extensions: ['.json'] });
 }
 
+const loadImage = async (url: string | URL | Request): Promise<string | HTMLImageElement | HTMLCanvasElement | Uint8Array | RGBAData> => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    // @ts-ignore
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+};
+
 /**
  * Download a conversation as a JSON file, for backup and future restore
  * @throws {Error} if the user closes the dialog, or file could not be saved
  */
-export async function downloadConversation(conversation: DConversation, format: 'json' | 'markdown') {
+export async function downloadConversation(conversation: DConversation, format: 'json' | 'markdown' | 'pdf') {
 
   let blob: Blob;
   let extension: string;
@@ -130,19 +143,125 @@ export async function downloadConversation(conversation: DConversation, format: 
     const json = JSON.stringify(exportableConversation, null, 2);
     blob = new Blob([json], { type: 'application/json' });
     extension = '.json';
-  } else if (format == 'markdown') {
+
+    // bonify title for saving to file (spaces to dashes, etc)
+    const fileTitle = conversationTitle(conversation).replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'untitled';
+
+    // link to begin the download
+    await fileSave(blob, { fileName: `conversation-${fileTitle ? fileTitle + '-' : ''}${conversation.id}${extension}`, extensions: [extension] });
+  }
+  else if (format == 'markdown') {
     const exportableMarkdown = conversationToMarkdown(conversation, false, true, (sender: string) => `## ${sender} ##`);
     blob = new Blob([exportableMarkdown], { type: 'text/markdown' });
     extension = '.md';
-  } else {
+    // bonify title for saving to file (spaces to dashes, etc)
+    const fileTitle = conversationTitle(conversation).replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'untitled';
+
+    // link to begin the download
+    await fileSave(blob, { fileName: `conversation-${fileTitle ? fileTitle + '-' : ''}${conversation.id}${extension}`, extensions: [extension] });
+  }
+  else if (format == 'pdf') {
+
+    let exportableConversation: ExportedConversationJsonV1 = conversationToJsonV1(conversation);
+
+    // remove system messages
+    exportableConversation.messages = exportableConversation.messages.filter(message => message.role !== "system");
+
+    console.log(exportableConversation);
+
+    // Convertendo HTML para PDF com jsPDF
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    // Margens padrão
+    const margin = 20;
+    const pageWidth = 210; // Largura A4 em mm
+    const pageHeight = 297; // Altura A4 em mm
+    const maxLineWidth = pageWidth - (margin * 2); // Largura máxima do texto
+    const lineHeight = pdf.getLineHeight();
+
+    pdf.setFont('Helvetica', 'normal');
+    pdf.setFontSize(11);
+
+    let currentYPosition = margin + 10;
+
+    for(let i = 0; i < exportableConversation.messages.length; i++){
+      let message = exportableConversation.messages[i];
+      let sender: string = message.sender;
+      let text = message.text;
+      switch (message.role) {
+        case 'assistant':
+          const purpose = exportableConversation.systemPurposeId;
+          sender = `${purpose || 'Assistente'} · *${prettyBaseModel(message.originLLM || '')}*`.trim();
+          break;
+        case 'user':
+          sender = 'Você';
+          break;
+      }
+
+      let splitText = pdf.splitTextToSize(sender, maxLineWidth);
+      splitText.forEach((textLine: string | string[], index: any) => {
+        if (currentYPosition > pageHeight - margin) {
+          pdf.addPage();
+          currentYPosition = margin + 10;
+        }
+
+        pdf.setFillColor(200, 200, 200); // Grey
+        pdf.setTextColor(0, 0, 0);
+        pdf.rect(margin, currentYPosition - 5, maxLineWidth, 7, 'F');
+
+        pdf.text(textLine, margin, currentYPosition);
+        currentYPosition += 7; // Ajuste conforme necessário
+      });
+
+      const regexImg = /!\[.*\]\((.*?)\)/;
+      const match = text.match(regexImg);
+      if (match) {
+        const imageUrl = match[1];
+        // const image = await loadImage(imageUrl);
+
+        // Definindo o tamanho da imagem
+        const imgWidth = 512;
+        const imgHeight = 512;
+
+        const image = new Image();
+        image.src = imageUrl;
+        image.height = imgHeight;
+        image.width = imgWidth;
+
+        // Adicionando a imagem ao PDF
+        pdf.addImage(image, 'JPEG', margin, currentYPosition, imgWidth, imgHeight);
+
+        // Atualizando a posição Y após a imagem
+        currentYPosition += imgHeight + 10; // Adiciona espaço após a imagem
+      } else {
+        splitText = pdf.splitTextToSize(text, maxLineWidth);
+        splitText.forEach((textLine: string | string[], index: any) => {
+          if (currentYPosition > pageHeight - margin) {
+            pdf.addPage();
+            currentYPosition = margin + 10;
+          }
+
+          pdf.setFillColor(255, 255, 255); // White
+
+          pdf.text(textLine, margin, currentYPosition);
+          currentYPosition += 7;
+        });
+      }
+      currentYPosition += 3;
+    }
+
+    const fileTitle = conversationTitle(conversation).replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'untitled';
+    pdf.save(`conversation-${fileTitle ? fileTitle + '-' : ''}${conversation.id}.pdf`);
+  }
+  else {
     throw new Error(`Invalid download format: ${format}`);
   }
 
-  // bonify title for saving to file (spaces to dashes, etc)
-  const fileTitle = conversationTitle(conversation).replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'untitled';
 
-  // link to begin the download
-  await fileSave(blob, { fileName: `conversation-${fileTitle ? fileTitle + '-' : ''}${conversation.id}${extension}`, extensions: [extension] });
 }
 
 /**

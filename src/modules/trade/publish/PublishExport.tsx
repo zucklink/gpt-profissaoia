@@ -79,16 +79,16 @@ export function PublishExport(props: {
 
   return <>
 
-    <Button
-      variant='soft' disabled={!hasConversation || publishUploading}
-      loading={publishUploading}
-      color={publishResponse ? 'success' : 'primary'}
-      endDecorator={<ExitToAppIcon />}
-      sx={{ minWidth: 240, justifyContent: 'space-between' }}
-      onClick={handlePublishConversation}
-    >
-      Share Copy · Paste.gg
-    </Button>
+    {/*<Button*/}
+    {/*  variant='soft' disabled={!hasConversation || publishUploading}*/}
+    {/*  loading={publishUploading}*/}
+    {/*  color={publishResponse ? 'success' : 'primary'}*/}
+    {/*  endDecorator={<ExitToAppIcon />}*/}
+    {/*  sx={{ minWidth: 240, justifyContent: 'space-between' }}*/}
+    {/*  onClick={handlePublishConversation}*/}
+    {/*>*/}
+    {/*  Share Copy · Paste.gg*/}
+    {/*</Button>*/}
 
     {/* [publish] confirmation */}
     {publishConversationId && (
