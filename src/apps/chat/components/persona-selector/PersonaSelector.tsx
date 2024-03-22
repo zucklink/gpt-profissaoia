@@ -284,7 +284,7 @@ export function PersonaSelector(props: {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <Typography level="title-sm">
-            Personas de IA
+            Escolha seu assistente de IA
           </Typography>
           <Tooltip disableInteractive title={editMode ? 'Concluir Edição' : 'Editar Blocos'}>
             <IconButton size="sm" onClick={toggleEditMode}
