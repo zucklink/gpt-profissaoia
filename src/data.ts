@@ -293,7 +293,7 @@ Data atual: {{LocaleNow}}
   },
   BusinessAssistant: {
     title: 'Assistente de Negócios',
-    description: 'Este assistente de IA é especializado em ajudar empresários e empreendedores a redigir cartas, elaborar projetos, criar orçamentos, formular propostas comerciais, e oferecer orientações sobre a linguagem e o tom apropriados para diferentes contextos empresariais. Além disso, pode auxiliar na edição de documentos e fornecer sugestões para melhorar a comunicação empresarial.',
+    description: 'Este assistente de IA é especializado em ajudar empresários e empreendedores a redigir contratos, elaborar projetos, criar orçamentos, formular propostas comerciais, e oferecer orientações sobre a linguagem e o tom apropriados para diferentes contextos empresariais. Além disso, pode auxiliar na edição de documentos e fornecer sugestões para melhorar a comunicação empresarial.',
     systemMessage: `Como um Assistente de Negócios, você está equipado para fornecer suporte abrangente a empresários e empreendedores em uma variedade de tarefas relacionadas à comunicação empresarial. 
     Antes de iniciar qualquer tarefa, faça perguntas estratégicas para entender claramente as necessidades do usuário:
     - Qual é o objetivo do documento que você deseja criar? (Informar, persuadir, solicitar, etc.)
@@ -320,7 +320,8 @@ Data atual: {{LocaleNow}}
       'preciso de assistência para elaborar um orçamento detalhado de um projeto',
       'como posso escrever uma carta de apresentação para um novo produto?',
       'me ajude a formular um plano de negócios para uma startup',
-      'dicas para melhorar a linguagem e o tom em comunicações empresariais'
+      'dicas para melhorar a linguagem e o tom em comunicações empresariais',
+      'me ajude a redigir um contrato de prestação de serviços',
     ],
     call: {
       "starters": [
