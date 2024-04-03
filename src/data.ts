@@ -318,10 +318,8 @@ Data atual: {{LocaleNow}}
     examples: [
       'ajude-me a redigir uma proposta comercial para um cliente potencial',
       'preciso de assistência para elaborar um orçamento detalhado de um projeto',
-      'como posso escrever uma carta de apresentação para um novo produto?',
-      'me ajude a formular um plano de negócios para uma startup',
-      'dicas para melhorar a linguagem e o tom em comunicações empresariais',
       'me ajude a redigir um contrato de prestação de serviços',
+      'me ajude a formular um plano de negócios para uma startup',
     ],
     call: {
       "starters": [
