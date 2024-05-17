@@ -66,7 +66,8 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
   const multiSource = modelSources.length > 1;
 
   // Auto-open this dialog - anytime no source is selected
-  const autoOpenTrigger = !selectedSourceId && !props.suspendAutoModelsSetup;
+  // const autoOpenTrigger = !selectedSourceId && !props.suspendAutoModelsSetup;
+  const autoOpenTrigger = true;
   React.useEffect(() => {
     if (autoOpenTrigger)
       return runWhenIdle(openModelsSetup, 2000);
