@@ -76,12 +76,16 @@ function LLMDropdown(props: {
       }
     }
 
+    // console.log('chatLlmId', chatLlmId);
+    // console.log('llmItems', llmItems);
+
     //GPT PROFISSAO IA - VALOR FIXO GPT 4
     // console.log('llmItems', llmItems);
     llmItems = {};
-    llmItems["openai-gpt-4-0125-preview"] = {
-      title: "GPT-4 Turbo",
+    llmItems["openai-gpt-4o-2024-05-13"] = {
+      title: "GPT-4o [2024 05 13]",
     };
+
     // llmItems["openai-gpt-3.5-turbo-0125"] = {
     //   title: "GPT-4 Turbo (0125) 🌟",
     // };

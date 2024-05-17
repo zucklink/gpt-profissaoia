@@ -4,60 +4,33 @@ import type { ModelDescriptionSchema } from '../llm.server.types';
 import { wireMistralModelsListOutputSchema } from './mistral.wiretypes';
 import { wireOpenrouterModelsListOutputSchema } from './openrouter.wiretypes';
 import { wireTogetherAIListOutputSchema } from '~/modules/llms/server/openai/togetherai.wiretypes';
+import { OpenAIWire } from '~/modules/llms/server/openai/openai.wiretypes';
 
 
 // [Azure] / [OpenAI]
 const _knownOpenAIChatModels: ManualMappings = [
-  // GPT4 Vision
-  {
-    idPrefix: 'gpt-4-vision-preview',
-    label: 'GPT-4 Turbo · Vision',
-    description: 'GPT-4 Turbo model featuring improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Returns a maximum of 4,096 output tokens.',
-    contextWindow: 128000,
-    maxCompletionTokens: 4096,
-    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn, LLM_IF_OAI_Vision],
-    hidden: true, // because no 'image input' support yet
-    isLatest: true,
-  },
 
-  // GPT4 Turbo
+  // GPT-4o -> 2024-05-13
   {
-    idPrefix: 'gpt-4-0125-preview',
-    label: 'GPT-4 Turbo (0125)',
-    description: 'The latest GPT-4 model intended to reduce cases of “laziness” where the model doesn’t complete a task.',
+    idPrefix: 'gpt-4o',
+    label: 'GPT-4o',
+    description: 'Currently points to gpt-4o-2024-05-13.',
+    symLink: 'gpt-4o-2024-05-13',
+    // hidden: true,
+    // copied from symlinked
     contextWindow: 128000,
     maxCompletionTokens: 4096,
-    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn],
-    isLatest: true,
+    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Vision, LLM_IF_OAI_Fn],
   },
   {
-    idPrefix: 'gpt-4-1106-preview',
-    label: 'GPT-4 Turbo (1106)',
-    description: '128k context, fresher knowledge, cheaper than GPT-4.',
+    isLatest: false,
+    hidden: false,
+    idPrefix: 'gpt-4o-2024-05-13',
+    label: 'GPT-4o (2024-05-13)',
+    description: 'Advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo.',
     contextWindow: 128000,
     maxCompletionTokens: 4096,
-    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn],
-  },
-  {
-    idPrefix: 'gpt-4-turbo-preview',
-    label: 'GPT-4 Turbo',
-    description: 'Currently points to gpt-4-0125-preview.',
-    symLink: 'gpt-4-0125-preview',
-    hidden: true,
-    // copied
-    contextWindow: 128000,
-    maxCompletionTokens: 4096,
-    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn],
-  },
-
-  // GPT4-32k's
-  {
-    idPrefix: 'gpt-4-32k-0613',
-    label: 'GPT-4 32k (0613)',
-    description: 'Snapshot of gpt-4-32 from June 13th 2023.',
-    contextWindow: 32768,
-    interfaces: [LLM_IF_OAI_Chat],
-    isLatest: true,
+    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Vision, LLM_IF_OAI_Fn],
   },
   {
     idPrefix: 'gpt-4-32k-0314',
@@ -222,6 +195,26 @@ export function azureModelToModelDescription(azureDeploymentRef: string, openAIM
   // if the deployment name mataches an OpenAI model prefix, use that
   const known = _knownOpenAIChatModels.find(base => azureDeploymentRef == base.idPrefix);
   return fromManualMapping(_knownOpenAIChatModels, known ? azureDeploymentRef : openAIModelIdBase, modelCreated, modelUpdated);
+}
+
+const openAIModelsDenyList: string[] = [
+  /* /v1/audio/speech */
+  'tts-1-hd', 'tts-1',
+  /* /v1/embeddings */
+  'text-embedding-3-small', 'text-embedding-3-large', 'text-embedding-ada-002',
+  /* /v1/audio/transcriptions, /v1/audio/translations	*/
+  'whisper-1',
+  /* /v1/images/generations */
+  'dall-e-3', 'dall-e-2',
+  /* /v1/completions (Legacy)	 */
+  '-turbo-instruct', 'davinci-', 'babbage-',
+
+  // just Legacy models, that we should drop
+  'gpt-3.5-turbo-16k-0613', 'gpt-3.5-turbo-0613', 'gpt-3.5-turbo-0301', 'gpt-3.5-turbo-16k',
+];
+
+export function openAIModelFilter(model: OpenAIWire.Models.ModelDescription) {
+  return !openAIModelsDenyList.some(deny => model.id.includes(deny));
 }
 
 export function openAIModelToModelDescription(modelId: string, modelCreated: number, modelUpdated?: number): ModelDescriptionSchema {
