@@ -7,7 +7,7 @@ import { GoodModal } from '~/common/components/GoodModal';
 import { runWhenIdle } from '~/common/util/pwaUtils';
 import { useOptimaLayout } from '~/common/layout/optima/useOptimaLayout';
 
-import { DModelSource, DModelSourceId, useModelsStore } from '../store-llms';
+import { DLLMId, DModelSource, DModelSourceId, useModelsStore } from '../store-llms';
 import { createModelSourceForDefaultVendor, findVendorById } from '../vendors/vendors.registry';
 
 import { LLMOptionsModal } from './LLMOptionsModal';
@@ -110,6 +110,15 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
       if (shallFetchSucceed) {
         console.log('Fetching models...');
         refetch();
+
+        // Set the predefined model id
+        useModelsStore.getState().setChatLLMId('openai-gpt-4o-2024-05-13');
+        useModelsStore.getState().setFastLLMId('openai-gpt-4o-2024-05-13');
+        useModelsStore.getState().setFuncLLMId('openai-gpt-4o-2024-05-13');
+
+        console.log('chatLLMId: ', useModelsStore.getState().chatLLMId);
+        console.log('fastLLMId: ', useModelsStore.getState().fastLLMId);
+        console.log('funcLLMId: ', useModelsStore.getState().funcLLMId);
       }
     }
   }, [showModelsSetup]);
@@ -146,6 +155,10 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
 
         <Typography level="h3" sx={{ textAlign: 'center' }}>
           Powered by OpenAI
+        </Typography>
+
+        <Typography level="title-sm" sx={{ textAlign: 'center', mt: 2 }}>
+          Modelo: {useModelsStore.getState().chatLLMId}
         </Typography>
 
         <Divider sx={{  mt: 2 }}/>
