@@ -100,21 +100,19 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
 
   React.useEffect(() => {
     if (showModelsSetup && activeSource?.vId === ModelVendorOpenAI.id) {
-      // derived state
-      const { oaiKey, oaiOrg, oaiHost, heliKey, moderationCheck } = access;
+      const { oaiKey } = access;
 
       const needsUserKey = !ModelVendorOpenAI.hasBackendCap?.();
       const keyValid = isValidOpenAIApiKey(oaiKey);
-      const keyError = (/*needsUserKey ||*/ !!oaiKey) && !keyValid;
       const shallFetchSucceed = oaiKey ? keyValid : !needsUserKey;
 
       // fetch models
-      if (!sourceHasLLMs && shallFetchSucceed) {
+      if (shallFetchSucceed) {
+        console.log('Fetching models...');
         refetch();
       }
     }
-  }, [showModelsSetup, activeSource, sourceHasLLMs, shallFetchSucceed, refetch, access]);
-
+  }, [showModelsSetup]);
 
   return <>
 
