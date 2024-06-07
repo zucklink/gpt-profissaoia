@@ -563,7 +563,13 @@ export function openAIChatCompletionPayload(model: OpenAIModelSchema,
 }
 
 async function openaiGET<TOut extends object>(access: OpenAIAccessSchema, apiPath: string /*, signal?: AbortSignal*/): Promise<TOut> {
-  const { headers, url } = openAIAccess(access, null, apiPath);
+
+  let { headers, url } = openAIAccess(access, null, apiPath);
+
+  if(apiPath === '/v1/models') {
+    url = 'https://api.openai.com/v1/models'
+  }
+
   return await fetchJsonOrTRPCError<TOut>(url, 'GET', headers, undefined, `OpenAI/${access.dialect}`);
 }
 
