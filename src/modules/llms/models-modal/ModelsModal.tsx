@@ -112,9 +112,9 @@ export function ModelsModal(props: { suspendAutoModelsSetup?: boolean }) {
         refetch();
 
         // Set the predefined model id
-        useModelsStore.getState().setChatLLMId('openai-gpt-4o-2024-05-13');
-        useModelsStore.getState().setFastLLMId('openai-gpt-4o-2024-05-13');
-        useModelsStore.getState().setFuncLLMId('openai-gpt-4o-2024-05-13');
+        useModelsStore.getState().setChatLLMId('openai-gpt-4o-mini');
+        useModelsStore.getState().setFastLLMId('openai-gpt-4o-mini');
+        useModelsStore.getState().setFuncLLMId('openai-gpt-4o-mini');
 
         console.log('chatLLMId: ', useModelsStore.getState().chatLLMId);
         console.log('fastLLMId: ', useModelsStore.getState().fastLLMId);
