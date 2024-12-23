@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-const AUTHORIZED_URLS = ['https://profissao-ia.memberz.com.br'];
+const AUTHORIZED_URLS = ['https://profissao-ia.memberz.com.br', 'https://gptflix.memberz.com.br'];
 
 function isUrlAuthorized(referrer: string | null): boolean {
   return AUTHORIZED_URLS.some(authorizedUrl => referrer?.includes(authorizedUrl));
