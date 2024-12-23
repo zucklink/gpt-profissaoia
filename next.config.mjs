@@ -27,7 +27,7 @@ let nextConfig = {
     serverComponentsExternalPackages: ['puppeteer-core'],
   },
 
-  async headers() {
+   async headers() {
     return [
       {
         // Aplica esta regra a todas as rotas
@@ -35,7 +35,7 @@ let nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self' https://profissao-ia.memberz.com.br;",
+            value: "frame-ancestors 'self' https://profissao-ia.memberz.com.br https://gptflix.memberz.com.br;",
           },
         ],
       },
