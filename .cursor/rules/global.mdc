@@ -1,0 +1,104 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+### Tecnologias Principais
+
+1. **Frontend**:
+   - Next.js 14.1.0 (Framework React)
+   - React 18.2.0
+   - TypeScript
+   - Material-UI (MUI) com Joy UI
+   - Zustand (Gerenciamento de Estado)
+   - React Query (TanStack Query)
+
+2. **Backend**:
+   - tRPC (API Type-safe)
+   - Prisma (ORM)
+   - Zod (Validação de Schema)
+
+3. **Ferramentas de Desenvolvimento**:
+   - ESLint
+   - Prettier
+   - TypeScript
+   - Docker
+
+### Estrutura do Projeto
+
+```
+big-agi/
+├── app/                    # Diretório principal da aplicação Next.js
+├── src/                    # Código fonte principal
+│   ├── server/            # Código do servidor
+│   │   └── prisma/       # Configurações do Prisma
+├── public/                # Arquivos estáticos
+├── pages/                 # Páginas da aplicação
+├── docs/                  # Documentação
+└── .github/              # Configurações do GitHub
+```
+
+### Boas Práticas Recomendadas
+
+1. **Arquitetura e Organização**:
+   - Manter a separação clara entre código do cliente e servidor
+   - Utilizar TypeScript para todo o código
+   - Seguir o padrão de organização de pastas do Next.js
+   - Implementar validação de tipos com Zod
+
+2. **Performance**:
+   - Utilizar lazy loading para componentes pesados
+   - Implementar cache com React Query
+   - Otimizar imagens com Sharp
+   - Utilizar bundle analyzer para monitorar tamanho do bundle
+
+3. **Segurança**:
+   - Implementar autenticação adequada
+   - Validar todas as entradas com Zod
+   - Utilizar variáveis de ambiente para dados sensíveis
+   - Implementar rate limiting
+
+4. **Desenvolvimento**:
+   - Manter o código formatado com Prettier
+   - Seguir as regras do ESLint
+   - Utilizar Docker para desenvolvimento consistente
+   - Manter documentação atualizada
+   - Sempre utilize a tool sequentialthinking
+
+5. **Estado e Gerenciamento de Dados**:
+   - Utilizar Zustand para estado global
+   - Implementar React Query para cache e sincronização
+   - Utilizar Prisma para operações no banco de dados
+   - Implementar validação de dados com Zod
+
+6. **UI/UX**:
+   - Utilizar componentes do MUI Joy UI
+   - Implementar design responsivo
+   - Seguir princípios de acessibilidade
+   - Manter consistência visual
+
+7. **Testes**:
+   - Implementar testes unitários
+   - Adicionar testes de integração
+   - Utilizar testes end-to-end
+   - Manter cobertura de testes adequada
+
+8. **Deploy e CI/CD**:
+   - Utilizar Vercel para deploy
+   - Implementar CI/CD com GitHub Actions
+   - Manter ambiente de staging
+   - Monitorar performance com Vercel Analytics
+
+9. **Documentação**:
+   - Manter README atualizado
+   - Documentar APIs com tRPC
+   - Documentar componentes principais
+   - Manter changelog atualizado
+
+10. **Manutenção**:
+    - Manter dependências atualizadas
+    - Seguir padrões de versionamento semântico
+    - Implementar logging adequado
+    - Monitorar erros em produção
+
+Este projeto é uma aplicação robusta que utiliza tecnologias modernas e bem estabelecidas. A arquitetura escolhida permite escalabilidade e manutenibilidade, com foco em type safety e performance.

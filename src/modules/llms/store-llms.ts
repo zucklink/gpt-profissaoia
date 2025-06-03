@@ -105,9 +105,9 @@ export const useModelsStore = create<LlmsStore>()(
 
       llms: [],
       sources: [],
-      chatLLMId: "openai-gpt-4o-mini",
-      fastLLMId: "openai-gpt-4o-mini",
-      funcLLMId: "openai-gpt-4o-mini",
+      chatLLMId: "openai-gpt-4.1-nano",
+      fastLLMId: "openai-gpt-4.1-nano",
+      funcLLMId: "openai-gpt-4.1-nano",
 
       setChatLLMId: (id: DLLMId | null) =>
         set(state => updateSelectedIds(state.llms, id, state.fastLLMId, state.funcLLMId)),

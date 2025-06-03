@@ -27,7 +27,7 @@ const _knownOpenAIChatModels: ManualMappings = [
     hidden: false,
     idPrefix: 'gpt-4o-2024-05-13',
     label: 'GPT-4o (2024-05-13)',
-    description: 'Advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo.',
+    description: 'Advanced, multimodal flagship model that\'s cheaper and faster than GPT-4 Turbo.',
     contextWindow: 128000,
     maxCompletionTokens: 4096,
     interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Vision, LLM_IF_OAI_Fn],
@@ -79,6 +79,29 @@ const _knownOpenAIChatModels: ManualMappings = [
     hidden: true,
   },
 
+  // 4.1 Nano
+  {
+    idPrefix: 'gpt-4.1-nano',
+    label: 'GPT-4.1 Nano',
+    description: 'Atalho para gpt-4.1-nano-2025-04-14.',
+    symLink: 'gpt-4.1-nano-2025-04-14',
+    contextWindow: 8192,
+    maxCompletionTokens: 4096,
+    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn],
+    isLatest: false,
+    hidden: false,
+  },
+  {
+    idPrefix: 'openai-gpt-4.1-nano',
+    label: 'GPT-4.1 Nano',
+    description: 'Alias para gpt-4.1-nano-2025-04-14.',
+    symLink: 'gpt-4.1-nano-2025-04-14',
+    contextWindow: 8192,
+    maxCompletionTokens: 4096,
+    interfaces: [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn],
+    isLatest: false,
+    hidden: false,
+  },
 
   // 3.5-Turbo-Instruct (Not for Chat)
   {

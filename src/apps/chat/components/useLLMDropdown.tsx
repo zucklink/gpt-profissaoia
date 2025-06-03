@@ -82,8 +82,8 @@ function LLMDropdown(props: {
     //GPT PROFISSAO IA - VALOR FIXO GPT 4
     // console.log('llmItems', llmItems);
     llmItems = {};
-    llmItems["openai-gpt-4o-mini"] = {
-      title: "GPT-4o [mini]",
+    llmItems["openai-gpt-4.1-nano"] = {
+      title: "GPT-4.1 Nano",
     };
 
     // llmItems["openai-gpt-3.5-turbo-0125"] = {
