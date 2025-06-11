@@ -120,6 +120,33 @@ Add extra functionality with these integrations:
 
 <br/>
 
+## Architecture Overview
+
+This project utilizes a modern, modular architecture designed for scalability and maintainability.
+
+**Core Technologies:**
+
+*   **Frontend:** [Next.js](https://nextjs.org/) (with [React](https://react.dev/)) for a dynamic and responsive user interface.
+*   **Backend:** Leverages Next.js API routes and [tRPC](https://trpc.io/) endpoints for handling business logic and API requests.
+*   **Language:** [TypeScript](https://www.typescriptlang.org/) for robust type safety across the entire stack.
+*   **API Communication:** [tRPC](https://trpc.io/) ensures efficient and type-safe communication between the client and server.
+*   **ORM:** [Prisma](https://www.prisma.io/) for database interactions, supporting various configurable databases.
+
+**Main Components:**
+
+*   **Frontend:** The user-facing interface built with Next.js and React, providing all interactive elements and views.
+*   **Backend:** Consists of Next.js API routes and tRPC endpoints. This is where the core business logic, API request handling, and coordination with other services occur.
+*   **LLM Integration Layer:** A dedicated modular system located in `src/modules/llms/`. This layer is responsible for connecting to and managing APIs from various Large Language Model providers, both cloud-based and local instances.
+*   **Data Storage:**
+    *   **Persistent Data:** Prisma is used as the ORM to interact with a primary database (configurable, e.g., PostgreSQL, MySQL, SQLite) for storing data such as shared chats (if this feature is enabled).
+    *   **Client-side Data:** The browser's local storage and/or IndexedDB are used for storing client-specific data, including individual user conversations and application settings.
+
+**Modular Design:**
+
+The project emphasizes a modular design, evident in the organization of `src/modules/` (for backend functionalities like LLM integrations) and `src/apps/` (for distinct application features or views). This structure facilitates the easy addition of new features, LLM vendors, and other integrations, making the codebase adaptable and easier to extend.
+
+<br/>
+
 # 🌟 Get Involved!
 
 [//]: # ([![Official Discord]&#40;https://img.shields.io/discord/1098796266906980422?label=discord&logo=discord&logoColor=%23fff&style=for-the-badge&#41;]&#40;https://discord.gg/MkH4qj2Jp9&#41;)
@@ -148,6 +175,9 @@ Add extra functionality with these integrations:
 [//]: # (![Next.js]&#40;https://img.shields.io/badge/Next.js-000000?style=&logo=vercel&logoColor=white&#41;)
 
 To download and run this Typescript/React/Next.js project locally, the only prerequisite is Node.js with the `npm` package manager.
+We recommend using Node.js version 20 (as specified in the `.nvmrc` file). If you have `nvm` (Node Version Manager) installed, you can switch to the correct version by running `nvm use` in the project directory.
+The application uses tRPC for type-safe API communication between the frontend and backend; you can find more details in the [Architecture Overview](#architecture-overview) section.
+
 Clone this repo, install the dependencies (all local), and run the development server (which auto-watches the
 files for changes):
 
